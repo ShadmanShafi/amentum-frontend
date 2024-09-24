@@ -1,0 +1,18 @@
+.bg-gradient--custom {
+  background-image: linear-gradient(#e6e8ee, #f6f6f6);
+}
+
+.bg-gradient--auth {
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.9),
+    rgba(235, 236, 240, 0.45)
+  );
+}
+
+.bg-card--auth {
+  background: linear-gradient(#0e6b4f, #01a372);
+}
+
+.pointer {
+  cursor: pointer;
+}

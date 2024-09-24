@@ -1,0 +1,18 @@
+export const API_END_POINTS: Record<string, string> = {
+  REGISTER: 'register',
+  LOGIN: 'login',
+  TOKEN: 'token',
+  REFRESH: 'refresh',
+  PROFILE: 'profile',
+  UPDATE: 'update',
+  VM: 'vm',
+  CREATE: 'create',
+  UPLOAD: 'upload',
+  VPS: 'vps',
+  REBOOT: 'reboot',
+  RESET_PASSWORD: 'reset_password',
+  HARD_RESET: 'hard_reset',
+  REINSTALL: 'reinstall',
+  RESCUE: 'rescue',
+  EXIT_RESCUE: 'exit_rescue',
+} as const;
