@@ -3,13 +3,13 @@ import { Link, Outlet } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { selectedTheme, setTheme, Theme } from "@/store/features/theme.slice";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 function Layout() {
   const dispatch = useAppDispatch();
@@ -54,7 +54,7 @@ function Layout() {
       <Button variant={"link"} size={"icon"}>
         <Edit />
       </Button>
-      <div className="flex justify-center items-center text-primary font-bold">
+      <div className="flex items-center justify-center font-bold text-primary">
         <Outlet />
       </div>
     </div>

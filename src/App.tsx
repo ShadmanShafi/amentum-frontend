@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "./hooks/redux";
-import { getRouter } from "./Router";
-import { selectedTheme, setTheme, Theme } from "./store/features/theme.slice";
 
-function App() {
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { selectedTheme, setTheme, Theme } from "@/store/features/theme.slice";
+import { getRouter } from "@/router";
+
+const App = () => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector(selectedTheme);
+
   useEffect(() => {
     const root = document.documentElement;
     root.classList.remove("light", "dark");
@@ -28,11 +30,8 @@ function App() {
     const savedTheme = (localStorage.getItem("theme") as Theme) || "system";
     dispatch(setTheme(savedTheme));
   }, [dispatch]);
-  return (
-    <div>
-      <RouterProvider router={getRouter()} />
-    </div>
-  );
-}
+
+  return <RouterProvider router={getRouter()} />;
+};
 
 export default App;
