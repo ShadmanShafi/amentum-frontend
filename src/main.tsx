@@ -4,14 +4,17 @@ import { Provider } from "react-redux";
 
 import { store } from "@/store";
 
-import App from "@/App";
+import ErrorBoundary from "@/components/shared/ErrorBoundary";
+import Page from "@/page";
 
 import "@/index.scss";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <Page />
+      </Provider>
+    </ErrorBoundary>
   </StrictMode>
 );

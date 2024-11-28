@@ -1,11 +1,13 @@
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
+
+import Spinner from "@/components/shared/Loading";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { selectedTheme, setTheme, Theme } from "@/store/features/theme.slice";
-import { getRouter } from "@/router";
+import { router } from "@/routes";
 
-const App = () => {
+const Page = () => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector(selectedTheme);
 
@@ -31,7 +33,11 @@ const App = () => {
     dispatch(setTheme(savedTheme));
   }, [dispatch]);
 
-  return <RouterProvider router={getRouter()} />;
+  return (
+    <Suspense fallback={<Spinner />}>
+      <RouterProvider router={router} />
+    </Suspense>
+  );
 };
 
-export default App;
+export default Page;
