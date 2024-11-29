@@ -1,6 +1,8 @@
 import { FC } from "react";
-import { Home, Settings, Folder, File, HelpCircle } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { Folder, Home, Server } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
@@ -15,70 +17,92 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 export const AppSidebar: FC = (): JSX.Element => {
+  const { isMobile, toggleSidebar } = useSidebar();
+
   return (
-    <Sidebar collapsible="icon" className="">
+    <Sidebar collapsible="icon" className="mt-24">
       <div className="text-end">
         <SidebarTrigger />
       </div>
 
-      <SidebarContent>
+      <SidebarContent className="mx-2 ">
         <SidebarMenu>
           {/* Home */}
           <SidebarMenuItem key="home">
-            <SidebarMenuButton asChild>
-              <a className="cursor-not-allowed">
+            <SidebarMenuButton asChild disabled>
+              <Button variant="ghost" disabled className="justify-start w-full">
                 <Home />
                 <span>Home</span>
-              </a>
+              </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>
 
           {/* Server Management */}
-          <Collapsible defaultOpen>
+          <Collapsible className="group/collapsible">
             <SidebarMenuItem key="server-management">
               <CollapsibleTrigger key="server-management-trigger" asChild>
                 <SidebarMenuButton asChild>
-                  <div className="cursor-pointer">
+                  <Button variant="ghost" className="justify-start w-full">
                     <Folder />
                     <span>Serversteuerung</span>
-                  </div>
+                  </Button>
                 </SidebarMenuButton>
               </CollapsibleTrigger>
 
-              <CollapsibleContent key="servers">
-                <Collapsible defaultOpen>
+              <CollapsibleContent>
+                <Collapsible className="group/collapsible">
                   <SidebarMenuSub>
                     {/* Servers */}
                     <SidebarMenuSubItem>
                       <CollapsibleTrigger key="servers-trigger" asChild>
                         <SidebarMenuButton asChild>
-                          <div className="cursor-pointer">
-                            <File />
+                          <Button
+                            variant="ghost"
+                            className="justify-start w-full"
+                          >
+                            <Server />
                             <span>Servers</span>
-                          </div>
+                          </Button>
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
 
-                      <CollapsibleContent key="">
+                      <CollapsibleContent>
                         <SidebarMenuSub>
                           {/* VPS */}
                           <SidebarMenuSubItem>
-                            <SidebarMenuButton asChild>
-                              <a href="/server-management/servers/vps">
+                            <SidebarMenuButton
+                              asChild
+                              onClick={() => {
+                                if (isMobile) toggleSidebar();
+                              }}
+                            >
+                              <NavLink
+                                to="/server-management/servers/vps"
+                                className="pl-6"
+                              >
                                 <span>VPS</span>
-                              </a>
+                              </NavLink>
                             </SidebarMenuButton>
                           </SidebarMenuSubItem>
 
                           {/* VDS */}
                           <SidebarMenuSubItem>
-                            <SidebarMenuButton asChild>
-                              <a href="/server-management/servers/vds">
+                            <SidebarMenuButton
+                              asChild
+                              onClick={() => {
+                                if (isMobile) toggleSidebar();
+                              }}
+                            >
+                              <NavLink
+                                to="/server-management/servers/vds"
+                                className="pl-6"
+                              >
                                 <span>VDS</span>
-                              </a>
+                              </NavLink>
                             </SidebarMenuButton>
                           </SidebarMenuSubItem>
                         </SidebarMenuSub>
@@ -93,20 +117,20 @@ export const AppSidebar: FC = (): JSX.Element => {
           {/* Account */}
           <SidebarMenuItem key="account">
             <SidebarMenuButton asChild>
-              <a className="cursor-not-allowed">
-                <Settings />
+              <Button variant="ghost" disabled className="justify-start w-full">
+                <Home />
                 <span>Account</span>
-              </a>
+              </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>
 
           {/* Support */}
           <SidebarMenuItem key="support">
             <SidebarMenuButton asChild>
-              <a className="cursor-not-allowed">
-                <HelpCircle />
+              <Button variant="ghost" disabled className="justify-start w-full">
+                <Home />
                 <span>Support</span>
-              </a>
+              </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
