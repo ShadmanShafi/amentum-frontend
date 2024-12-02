@@ -41,7 +41,10 @@ export const AppSidebar: FC = (): JSX.Element => {
   };
 
   return (
-    <Sidebar collapsible="icon" className="h-full mt-24">
+    <Sidebar
+      collapsible="icon"
+      className="h-[calc(100vh-60px)] md:h-[calc(100vh-102px)] overflow-x-hidden overflow-y-auto mt-[60px] md:mt-[102px]"
+    >
       <SidebarContent className="gap-0 mt-6">
         {/* Home */}
         <SidebarMenu>
@@ -79,7 +82,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                 asChild
                 className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               >
-                <CollapsibleTrigger>
+                <CollapsibleTrigger className="hover:text-white hover:bg-customSubMenuHover">
                   {/* <Archive /> */}
                   <IconServerManagement />
                   <span className="me-2"></span>
@@ -103,7 +106,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                             asChild
                             className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                           >
-                            <CollapsibleTrigger className="hover:bg-opacity-20">
+                            <CollapsibleTrigger className="hover:text-white hover:bg-customSubMenuHover">
                               {/* <Server /> */}
                               <IconServers />
                               <span className="me-2"></span>

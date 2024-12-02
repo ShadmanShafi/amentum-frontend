@@ -15,11 +15,11 @@ export const MainLayout: FC = (): JSX.Element => {
     return (
       <SidebarProvider>
         <div className="flex flex-col w-full h-screen">
-          <div className="fixed top-0 left-0 w-full h-[60px] md:h-[96px]">
+          <div className="fixed top-0 left-0 w-full h-[60px] md:h-[102px]">
             <Header />
           </div>
 
-          <div className="flex flex-1 mt-[60px] md:mt-[96px] overflow-hidden">
+          <div className="flex flex-1 mt-[60px] md:mt-[102px] overflow-hidden">
             <AppSidebar />
             <Container />
           </div>
