@@ -74,7 +74,7 @@ export const AppSidebar: FC = (): JSX.Element => {
             className="group/collapsible"
             title="Serversteuerung"
           >
-            <SidebarGroup className="">
+            <SidebarGroup>
               <SidebarGroupLabel
                 asChild
                 className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
@@ -103,7 +103,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                             asChild
                             className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                           >
-                            <CollapsibleTrigger>
+                            <CollapsibleTrigger className="hover:bg-opacity-20">
                               {/* <Server /> */}
                               <IconServers />
                               <span className="me-2"></span>
