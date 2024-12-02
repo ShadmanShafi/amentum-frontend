@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { ChevronRight, Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,7 @@ import {
 } from "@/assets/Icons";
 
 export const AppSidebar: FC = (): JSX.Element => {
+  const location = useLocation();
   const { isMobile, toggleSidebar } = useSidebar();
 
   const [activeItem, setActiveItem] = useState<string | null>(null);
@@ -45,7 +46,7 @@ export const AppSidebar: FC = (): JSX.Element => {
       collapsible="icon"
       className="h-[calc(100vh-60px)] md:h-[calc(100vh-102px)] overflow-x-hidden overflow-y-auto mt-[60px] md:mt-[102px]"
     >
-      <SidebarContent className="gap-0 mt-6">
+      <SidebarContent className="gap-0 mt-6 overflow-x-hidden">
         {/* Home */}
         <SidebarMenu>
           <SidebarGroup>
@@ -61,7 +62,6 @@ export const AppSidebar: FC = (): JSX.Element => {
                   variant="ghost"
                   className="justify-start w-full"
                 >
-                  {/* <Home /> */}
                   <IconHome />
                   <span>Home</span>
                 </Button>
@@ -76,14 +76,14 @@ export const AppSidebar: FC = (): JSX.Element => {
             key="server-management"
             className="group/collapsible"
             title="Serversteuerung"
+            defaultOpen={location.pathname.includes("vps")}
           >
             <SidebarGroup>
               <SidebarGroupLabel
                 asChild
                 className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               >
-                <CollapsibleTrigger className="hover:text-white hover:bg-customSubMenuHover">
-                  {/* <Archive /> */}
+                <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverColor">
                   <IconServerManagement />
                   <span className="me-2"></span>
                   {"Serversteuerung"}
@@ -100,14 +100,14 @@ export const AppSidebar: FC = (): JSX.Element => {
                         key="servers-collapsible"
                         className="group/collapsible me-2"
                         title="Servers"
+                        defaultOpen={location.pathname.includes("vps")}
                       >
                         <SidebarGroup className="gap-2 ms-4">
                           <SidebarGroupLabel
                             asChild
                             className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                           >
-                            <CollapsibleTrigger className="hover:text-white hover:bg-customSubMenuHover">
-                              {/* <Server /> */}
+                            <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverColor">
                               <IconServers />
                               <span className="me-2"></span>
                               {"Servers"}
@@ -122,7 +122,10 @@ export const AppSidebar: FC = (): JSX.Element => {
                                 <SidebarMenuSubItem key="vps" className="ml-6">
                                   <SidebarMenuButton
                                     asChild
-                                    isActive={activeItem === "vps"}
+                                    isActive={
+                                      activeItem === "vps" ||
+                                      location.pathname.includes("vps")
+                                    }
                                     onClick={() => handleMenuItemClick("vps")}
                                   >
                                     <NavLink to="/server-management/servers/vps">
@@ -139,9 +142,6 @@ export const AppSidebar: FC = (): JSX.Element => {
                                     isActive={activeItem === "vds"}
                                     onClick={() => handleMenuItemClick("vds")}
                                   >
-                                    {/* <NavLink to="/server-management/servers/vds">
-                                      <span>VDS</span>
-                                    </NavLink> */}
                                     <Button
                                       variant="ghost"
                                       disabled
@@ -174,7 +174,6 @@ export const AppSidebar: FC = (): JSX.Element => {
                   disabled
                   className="justify-start w-full"
                 >
-                  {/* <User /> */}
                   <IconAccount />
                   <span>Account</span>
                 </Button>
@@ -193,7 +192,6 @@ export const AppSidebar: FC = (): JSX.Element => {
                   disabled
                   className="justify-start w-full"
                 >
-                  {/* <HelpCircle /> */}
                   <IconSupport />
                   <span>Support</span>
                 </Button>
