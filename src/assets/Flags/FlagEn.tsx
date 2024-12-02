@@ -8,8 +8,8 @@ export const FlagEn = () => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M0 3V21H24V3H0Z"
         fill="#2E42A5"
       />
@@ -23,8 +23,8 @@ export const FlagEn = () => {
         height="18"
       >
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M0 3V21H24V3H0Z"
           fill="white"
         />
@@ -47,8 +47,8 @@ export const FlagEn = () => {
           fill="#F50100"
         />
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M14.834 1.5H9.16698V9H-1.47852V15H9.16698V22.5H14.834V15H25.5215V9H14.834V1.5Z"
           fill="#F50100"
         />
@@ -62,8 +62,8 @@ export const FlagEn = () => {
           height="22"
         >
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M14.834 1.5H9.16698V9H-1.47852V15H9.16698V22.5H14.834V15H25.5215V9H14.834V1.5Z"
             fill="white"
           />
