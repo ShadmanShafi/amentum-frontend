@@ -16,8 +16,8 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        customSubMenuHover: "#213D56",
         customTextColor: "#232D42",
+        customMenuItemHoverColor: "#213D56",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

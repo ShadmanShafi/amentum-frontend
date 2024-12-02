@@ -83,7 +83,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                 asChild
                 className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               >
-                <CollapsibleTrigger className="hover:text-white hover:bg-customSubMenuHover">
+                <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverColor">
                   <IconServerManagement />
                   <span className="me-2"></span>
                   {"Serversteuerung"}
@@ -107,7 +107,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                             asChild
                             className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                           >
-                            <CollapsibleTrigger className="hover:text-white hover:bg-customSubMenuHover">
+                            <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverColor">
                               <IconServers />
                               <span className="me-2"></span>
                               {"Servers"}
