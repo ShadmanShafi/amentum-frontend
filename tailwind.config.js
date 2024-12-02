@@ -17,6 +17,7 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         customSubMenuHover: "#213D56",
+        customTextColor: "#232D42",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -61,6 +62,9 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      fontFamily: {
+        sans: ["Poppins", "sans-serif"],
       },
     },
   },

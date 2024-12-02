@@ -1,4 +1,7 @@
-import { Outlet, RouteObject } from "react-router-dom";
+import { RouteObject } from "react-router-dom";
+
+import Home from "@/pages/Home";
+import Vps from "@/pages/Vps";
 
 export const mainMenuList: RouteObject[] = [
   {
@@ -7,97 +10,27 @@ export const mainMenuList: RouteObject[] = [
       {
         path: "/",
         index: true,
-        element: <div>Home</div>,
+        element: <Home />,
       },
       {
-        path: "server-management",
-        element: (
-          <div>
-            Server Management
-            <Outlet />
-          </div>
-        ),
-        children: [
-          {
-            path: "servers",
-            element: (
-              <div>
-                Servers
-                <Outlet />
-              </div>
-            ),
-            children: [
-              {
-                path: "vps",
-                element: (
-                  <div>
-                    VPS
-                    <Outlet />
-                  </div>
-                ),
-                children: [
-                  {
-                    path: ":id",
-                    element: <div>Server Details</div>,
-                  },
-                ],
-              },
-              {
-                path: "vds",
-                element: (
-                  <div>
-                    VDS
-                    <Outlet />
-                  </div>
-                ),
-                children: [
-                  {
-                    path: ":id",
-                    element: <div>VDS Details</div>,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
+        path: "server-management/servers/vps",
+        element: <Vps />,
+      },
+      {
+        path: "server-management/servers/vps/:id",
+        element: <div>Server Details</div>,
+      },
+      {
+        path: "server-management/servers/vds/:id",
+        element: <div>VDS</div>,
       },
       {
         path: "account",
-        element: (
-          <div>
-            Account
-            <Outlet />
-          </div>
-        ),
-        children: [
-          {
-            path: "profile",
-            element: <div>Profile</div>,
-          },
-          {
-            path: "settings",
-            element: <div>Settings</div>,
-          },
-        ],
+        element: <div>Account</div>,
       },
       {
         path: "support",
-        element: (
-          <div>
-            Support
-            <Outlet />
-          </div>
-        ),
-        children: [
-          {
-            path: "faq",
-            element: <div>FAQ</div>,
-          },
-          {
-            path: "contact",
-            element: <div>Contact Support</div>,
-          },
-        ],
+        element: <div>Support</div>,
       },
     ],
   },
