@@ -1,6 +1,6 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Folder, Home, Server } from "lucide-react";
+import { ChevronRight, Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -9,130 +9,206 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
+  useSidebar,
   Sidebar,
   SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
-  SidebarTrigger,
-  useSidebar,
 } from "@/components/ui/sidebar";
+
+import {
+  IconAccount,
+  IconHome,
+  IconServerManagement,
+  IconServers,
+  IconSupport,
+} from "@/assets/Icons";
 
 export const AppSidebar: FC = (): JSX.Element => {
   const { isMobile, toggleSidebar } = useSidebar();
 
+  const [activeItem, setActiveItem] = useState<string | null>(null);
+
+  const handleMenuItemClick = (item: string) => {
+    setActiveItem(item);
+    if (isMobile) toggleSidebar();
+  };
+
   return (
-    <Sidebar collapsible="icon" className="mt-24">
-      <div className="text-end">
-        <SidebarTrigger />
-      </div>
-
-      <SidebarContent className="mx-2 ">
+    <Sidebar collapsible="icon" className="h-full mt-24">
+      <SidebarContent className="gap-0 mt-6">
+        {/* Home */}
         <SidebarMenu>
-          {/* Home */}
-          <SidebarMenuItem key="home">
-            <SidebarMenuButton asChild disabled>
-              <Button variant="ghost" disabled className="justify-start w-full">
-                <Home />
-                <span>Home</span>
-              </Button>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <SidebarGroup>
+            <SidebarMenuItem key="home">
+              <SidebarMenuButton
+                disabled
+                asChild
+                isActive={activeItem === "home"}
+                onClick={() => handleMenuItemClick("home")}
+              >
+                <Button
+                  disabled
+                  variant="ghost"
+                  className="justify-start w-full"
+                >
+                  {/* <Home /> */}
+                  <IconHome />
+                  <span>Home</span>
+                </Button>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarGroup>
+        </SidebarMenu>
 
-          {/* Server Management */}
-          <Collapsible className="group/collapsible">
-            <SidebarMenuItem key="server-management">
-              <CollapsibleTrigger key="server-management-trigger" asChild>
-                <SidebarMenuButton asChild>
-                  <Button variant="ghost" className="justify-start w-full">
-                    <Folder />
-                    <span>Serversteuerung</span>
-                  </Button>
-                </SidebarMenuButton>
-              </CollapsibleTrigger>
+        {/* Server Management */}
+        <SidebarMenu>
+          <Collapsible
+            key="server-management"
+            className="group/collapsible"
+            title="Serversteuerung"
+          >
+            <SidebarGroup className="">
+              <SidebarGroupLabel
+                asChild
+                className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+              >
+                <CollapsibleTrigger>
+                  {/* <Archive /> */}
+                  <IconServerManagement />
+                  <span className="me-2"></span>
+                  {"Serversteuerung"}
+                  <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                </CollapsibleTrigger>
+              </SidebarGroupLabel>
 
               <CollapsibleContent>
-                <Collapsible className="group/collapsible">
-                  <SidebarMenuSub>
+                <SidebarGroupContent>
+                  <SidebarMenuSub className="border-0">
                     {/* Servers */}
-                    <SidebarMenuSubItem>
-                      <CollapsibleTrigger key="servers-trigger" asChild>
-                        <SidebarMenuButton asChild>
-                          <Button
-                            variant="ghost"
-                            className="justify-start w-full"
+                    <SidebarMenuItem key="servers">
+                      <Collapsible
+                        key="servers-collapsible"
+                        className="group/collapsible me-2"
+                        title="Servers"
+                      >
+                        <SidebarGroup className="gap-2 ms-4">
+                          <SidebarGroupLabel
+                            asChild
+                            className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                           >
-                            <Server />
-                            <span>Servers</span>
-                          </Button>
-                        </SidebarMenuButton>
-                      </CollapsibleTrigger>
+                            <CollapsibleTrigger>
+                              {/* <Server /> */}
+                              <IconServers />
+                              <span className="me-2"></span>
+                              {"Servers"}
+                              <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                            </CollapsibleTrigger>
+                          </SidebarGroupLabel>
 
-                      <CollapsibleContent>
-                        <SidebarMenuSub>
-                          {/* VPS */}
-                          <SidebarMenuSubItem>
-                            <SidebarMenuButton
-                              asChild
-                              onClick={() => {
-                                if (isMobile) toggleSidebar();
-                              }}
-                            >
-                              <NavLink
-                                to="/server-management/servers/vps"
-                                className="pl-6"
-                              >
-                                <span>VPS</span>
-                              </NavLink>
-                            </SidebarMenuButton>
-                          </SidebarMenuSubItem>
+                          <CollapsibleContent>
+                            <SidebarGroupContent>
+                              <SidebarMenuSub className="border-0">
+                                {/* VPS */}
+                                <SidebarMenuSubItem key="vps" className="ml-6">
+                                  <SidebarMenuButton
+                                    asChild
+                                    isActive={activeItem === "vps"}
+                                    onClick={() => handleMenuItemClick("vps")}
+                                  >
+                                    <NavLink to="/server-management/servers/vps">
+                                      <span>VPS</span>
+                                    </NavLink>
+                                  </SidebarMenuButton>
+                                </SidebarMenuSubItem>
 
-                          {/* VDS */}
-                          <SidebarMenuSubItem>
-                            <SidebarMenuButton
-                              asChild
-                              onClick={() => {
-                                if (isMobile) toggleSidebar();
-                              }}
-                            >
-                              <NavLink
-                                to="/server-management/servers/vds"
-                                className="pl-6"
-                              >
-                                <span>VDS</span>
-                              </NavLink>
-                            </SidebarMenuButton>
-                          </SidebarMenuSubItem>
-                        </SidebarMenuSub>
-                      </CollapsibleContent>
-                    </SidebarMenuSubItem>
+                                {/* VDS */}
+                                <SidebarMenuSubItem key="vds" className="ml-6">
+                                  <SidebarMenuButton
+                                    disabled
+                                    asChild
+                                    isActive={activeItem === "vds"}
+                                    onClick={() => handleMenuItemClick("vds")}
+                                  >
+                                    {/* <NavLink to="/server-management/servers/vds">
+                                      <span>VDS</span>
+                                    </NavLink> */}
+                                    <Button
+                                      variant="ghost"
+                                      disabled
+                                      className="justify-start w-full"
+                                    >
+                                      <span>VDS</span>
+                                    </Button>
+                                  </SidebarMenuButton>
+                                </SidebarMenuSubItem>
+                              </SidebarMenuSub>
+                            </SidebarGroupContent>
+                          </CollapsibleContent>
+                        </SidebarGroup>
+                      </Collapsible>
+                    </SidebarMenuItem>
                   </SidebarMenuSub>
-                </Collapsible>
+                </SidebarGroupContent>
               </CollapsibleContent>
-            </SidebarMenuItem>
+            </SidebarGroup>
           </Collapsible>
+        </SidebarMenu>
 
-          {/* Account */}
-          <SidebarMenuItem key="account">
-            <SidebarMenuButton asChild>
-              <Button variant="ghost" disabled className="justify-start w-full">
-                <Home />
-                <span>Account</span>
-              </Button>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+        {/* Account */}
+        <SidebarMenu>
+          <SidebarGroup>
+            <SidebarMenuItem key="account">
+              <SidebarMenuButton asChild>
+                <Button
+                  variant="ghost"
+                  disabled
+                  className="justify-start w-full"
+                >
+                  {/* <User /> */}
+                  <IconAccount />
+                  <span>Account</span>
+                </Button>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarGroup>
+        </SidebarMenu>
 
-          {/* Support */}
-          <SidebarMenuItem key="support">
-            <SidebarMenuButton asChild>
-              <Button variant="ghost" disabled className="justify-start w-full">
-                <Home />
-                <span>Support</span>
-              </Button>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+        {/* Support */}
+        <SidebarMenu>
+          <SidebarGroup>
+            <SidebarMenuItem key="support">
+              <SidebarMenuButton asChild>
+                <Button
+                  variant="ghost"
+                  disabled
+                  className="justify-start w-full"
+                >
+                  {/* <HelpCircle /> */}
+                  <IconSupport />
+                  <span>Support</span>
+                </Button>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarGroup>
+        </SidebarMenu>
+
+        <SidebarMenu className="">
+          <SidebarGroup>
+            <SidebarMenuItem key="toggle-sidebar">
+              <SidebarMenuButton asChild>
+                <Button variant="ghost" onClick={() => toggleSidebar()}>
+                  <Menu />
+                </Button>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarGroup>
         </SidebarMenu>
       </SidebarContent>
     </Sidebar>

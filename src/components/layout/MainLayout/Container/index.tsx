@@ -3,8 +3,8 @@ import { Outlet } from "react-router-dom";
 
 export const Container: FC = (): JSX.Element => {
   return (
-    <div className="w-full h-[100vh] bg-[#e9ecef] overflow-x-hidden overflow-y-auto">
-      <div className="min-h-[calc(100vh-60px)] mx-7 my-4 bg-white">
+    <div className="flex-1 max-h-[calc(100vh-60px)] md:max-h-[calc(100vh-96px)] bg-[#e9ecef] overflow-x-hidden overflow-y-auto">
+      <div className="my-4 bg-white mx-7">
         <Outlet />
       </div>
     </div>
