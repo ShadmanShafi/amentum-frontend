@@ -81,7 +81,7 @@ export const AppSidebar: FC = (): JSX.Element => {
             <SidebarGroup>
               <SidebarGroupLabel
                 asChild
-                className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                className="text-sm group/label text-sidebar-foreground hover:text-sidebar-accent-foreground"
               >
                 <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverBg">
                   <IconServerManagement />
@@ -105,7 +105,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                         <SidebarGroup className="gap-2 ms-4">
                           <SidebarGroupLabel
                             asChild
-                            className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                            className="text-sm group/label text-sidebar-foreground hover:text-sidebar-accent-foreground"
                           >
                             <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverBg">
                               <IconServers />
