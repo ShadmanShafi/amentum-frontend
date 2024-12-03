@@ -19,7 +19,6 @@ import {
 } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ArrowUp, ArrowUpDown } from "lucide-react";
@@ -95,6 +94,76 @@ const servers = [
     ipAddress: "84.247.188.24",
     region: "EU",
   },
+  {
+    key: "8",
+    name: "Mitarbeiter-Server",
+    displayName: "Mitarbeiter",
+    productType: "VPS 4 SSD",
+    defaultUser: "Admin",
+    status: "Running",
+    ipAddress: "62.84.123.456",
+    region: "EU",
+  },
+  {
+    key: "9",
+    name: "Mitarbeiter-Server 2",
+    displayName: "Mitarbeiter 2",
+    productType: "VPS 2 SSD (ohne Setup)",
+    defaultUser: "Admin",
+    status: "Pause",
+    ipAddress: "213.166.15.98",
+    region: "EU",
+  },
+  {
+    key: "10",
+    name: "Mitarbeiter-Server 3",
+    displayName: "Mitarbeiter 3",
+    productType: "VPS 0 SSD",
+    defaultUser: "Root",
+    status: "Stopped",
+    ipAddress: "84.247.188.24",
+    region: "EU",
+  },
+  {
+    key: "11",
+    name: "Mitarbeiter-Server 2",
+    displayName: "Mitarbeiter 2",
+    productType: "VPS 2 SSD (ohne Setup)",
+    defaultUser: "Admin",
+    status: "Running",
+    ipAddress: "213.166.15.98",
+    region: "EU",
+  },
+  {
+    key: "12",
+    name: "Mitarbeiter-Server 3",
+    displayName: "Mitarbeiter 3",
+    productType: "VPS 0 SSD",
+    defaultUser: "Root",
+    status: "Running",
+    ipAddress: "84.247.188.24",
+    region: "EU",
+  },
+  {
+    key: "13",
+    name: "Mitarbeiter-Server 2",
+    displayName: "Mitarbeiter 2",
+    productType: "VPS 2 SSD (ohne Setup)",
+    defaultUser: "Admin",
+    status: "Running",
+    ipAddress: "213.166.15.98",
+    region: "EU",
+  },
+  {
+    key: "14",
+    name: "Mitarbeiter-Server 3",
+    displayName: "Mitarbeiter 3",
+    productType: "VPS 0 SSD",
+    defaultUser: "Root",
+    status: "Running",
+    ipAddress: "84.247.188.24",
+    region: "EU",
+  },
 ];
 
 const columns: ColumnDef<(typeof servers)[0]>[] = [
@@ -157,9 +226,9 @@ const Vps = () => {
         Servers & Hosting
       </h1>
 
-      <Separator className="mt-6" />
+      <Separator className="mt-8 mb-4" />
 
-      <Table>
+      <Table className="border">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -167,33 +236,36 @@ const Vps = () => {
                 <TableHead
                   key={header.id}
                   onClick={header.column.getToggleSortingHandler()}
-                  className="cursor-pointer select-none"
+                  className="px-5 py-2 text-base font-semibold border cursor-pointer select-none text-customTableHeaderColor bg-customTableHeaderBg"
                 >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                  {header.column.getIsSorted() &&
-                    {
-                      asc: <ArrowUp className="w-4 h-4 ml-2" />,
-                      desc: <ArrowUpDown className="w-4 h-4 ml-2" />,
-                    }[header.column.getIsSorted() as "asc" | "desc"]}
+                  <div className="flex items-center">
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                    {header.column.getIsSorted() &&
+                      {
+                        asc: <ArrowUp className="w-4 h-4 ml-2" />,
+                        desc: <ArrowUpDown className="w-4 h-4 ml-2" />,
+                      }[header.column.getIsSorted() as "asc" | "desc"]}
+                  </div>
                 </TableHead>
               ))}
             </TableRow>
           ))}
         </TableHeader>
+
         <TableBody>
           {table.getRowModel().rows.map((row) => (
             <TableRow
               key={row.id}
               onClick={() => handleRowClick(row.original.key)}
-              className="cursor-pointer"
+              className="text-xs cursor-pointer hover:bg-customTableRowHoverBg"
             >
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
+                <TableCell key={cell.id} className="px-5 py-4 border">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}

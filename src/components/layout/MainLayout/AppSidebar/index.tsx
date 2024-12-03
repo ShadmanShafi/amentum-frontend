@@ -83,7 +83,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                 asChild
                 className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               >
-                <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverColor">
+                <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverBg">
                   <IconServerManagement />
                   <span className="me-2"></span>
                   {"Serversteuerung"}
@@ -107,7 +107,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                             asChild
                             className="text-sm group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                           >
-                            <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverColor">
+                            <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverBg">
                               <IconServers />
                               <span className="me-2"></span>
                               {"Servers"}
@@ -200,11 +200,19 @@ export const AppSidebar: FC = (): JSX.Element => {
           </SidebarGroup>
         </SidebarMenu>
 
+        {/* Menu Toggle */}
         <SidebarMenu className="">
-          <SidebarGroup>
-            <SidebarMenuItem key="toggle-sidebar">
-              <SidebarMenuButton asChild>
-                <Button variant="ghost" onClick={() => toggleSidebar()}>
+          <SidebarGroup className="">
+            <SidebarMenuItem key="toggle-sidebar" className="">
+              <SidebarMenuButton
+                asChild
+                className="hover:bg-customMenuItemHoverBg"
+              >
+                <Button
+                  variant="ghost"
+                  className="hover:text-white active:bg-customMenuItemHoverBg"
+                  onClick={() => toggleSidebar()}
+                >
                   <Menu />
                 </Button>
               </SidebarMenuButton>

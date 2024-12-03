@@ -17,7 +17,10 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         customTextColor: "#232D42",
-        customMenuItemHoverColor: "#213D56",
+        customTableHeaderBg: "#F8F9FA",
+        customTableHeaderColor: "#082743",
+        customTableRowHoverBg: "#F5FBFD",
+        customMenuItemHoverBg: "#213D56",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
