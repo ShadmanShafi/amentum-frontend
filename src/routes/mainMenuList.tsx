@@ -2,6 +2,7 @@ import { RouteObject } from "react-router-dom";
 
 import Home from "@/pages/Home";
 import Vps from "@/pages/Vps";
+import VpsDetails from "@/pages/Vps/Details";
 
 export const mainMenuList: RouteObject[] = [
   {
@@ -18,7 +19,7 @@ export const mainMenuList: RouteObject[] = [
       },
       {
         path: "server-management/servers/vps/:id",
-        element: <div>Server Details</div>,
+        element: <VpsDetails />,
       },
       {
         path: "server-management/servers/vds/:id",

@@ -16,6 +16,7 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        customContainerBg: "#e9ecef",
         customTextColor: "#232D42",
         customTableHeaderBg: "#F8F9FA",
         customTableHeaderColor: "#082743",
