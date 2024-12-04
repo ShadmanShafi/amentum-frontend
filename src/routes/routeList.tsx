@@ -3,6 +3,8 @@ import { RouteObject } from "react-router-dom";
 import { MainLayout } from "../components/layout";
 import { mainMenuList } from "./mainMenuList";
 
+import Login from "@/pages/Login";
+
 export const routeList: RouteObject[] = [
   {
     path: "/",
@@ -11,7 +13,7 @@ export const routeList: RouteObject[] = [
   },
   {
     path: "/login",
-    element: <div>login</div>,
+    element: <Login />,
   },
   {
     path: "/registration",
