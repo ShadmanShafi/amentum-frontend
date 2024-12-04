@@ -4,6 +4,8 @@ import { MainLayout } from "../components/layout";
 import { mainMenuList } from "./mainMenuList";
 
 import Login from "@/pages/Login";
+import SignUp from "@/pages/SignUp";
+import ResetPassword from "@/pages/ResetPassword";
 
 export const routeList: RouteObject[] = [
   {
@@ -17,11 +19,11 @@ export const routeList: RouteObject[] = [
   },
   {
     path: "/registration",
-    element: <div>registration</div>,
+    element: <SignUp />,
   },
   {
     path: "/reset-password",
-    element: <div>reset-password</div>,
+    element: <ResetPassword />,
   },
   {
     path: "*",
