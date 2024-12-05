@@ -5,7 +5,8 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        'login-graphic': "url('/src/assets/LoginGraphic.svg')",
+        "login-graphic": "url('/src/assets/LoginGraphic.svg')",
+        "login-diamond-graphic": "url('/src/assets/LoginDiamondBgGraphic.svg')",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -21,6 +22,7 @@ export default {
         },
         customContainerBg: "#e9ecef",
         customTextColor: "#232D42",
+        customTextColorSecondary: "#8A92A6",
         customTableHeaderBg: "#F8F9FA",
         customTableHeaderColor: "#082743",
         customTableRowHoverBg: "#F5FBFD",
