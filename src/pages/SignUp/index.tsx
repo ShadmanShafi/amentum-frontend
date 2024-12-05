@@ -40,7 +40,7 @@ const SignUp = () => {
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
     console.log("submitted data: ", data);
 
-    navigate("/server-management/servers/vps");
+    navigate("/login");
   };
 
   return (
