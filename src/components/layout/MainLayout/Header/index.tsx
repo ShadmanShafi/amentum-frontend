@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
@@ -18,6 +19,7 @@ import { ChevronRight } from "lucide-react";
 
 export const Header: FC = (): JSX.Element => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { isMobile } = useSidebar();
   const { language, changeLanguage } = useLanguage();
 
@@ -77,8 +79,8 @@ export const Header: FC = (): JSX.Element => {
         <div>
           <Button
             size="sm"
-            variant="ghost"
-            className="px-4 font-bold text-white rounded-3xl bg-primary"
+            className="px-4 font-bold rounded-3xl"
+            onClick={() => navigate("/login")}
           >
             Log out
           </Button>

@@ -27,6 +27,7 @@ export default {
         customTableHeaderColor: "#082743",
         customTableRowHoverBg: "#F5FBFD",
         customMenuItemHoverBg: "#213D56",
+        customPrimaryBtnHoverBg: "hsla(27, 87%, 50%, 0.9)",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

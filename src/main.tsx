@@ -6,6 +6,7 @@ import { I18nextProvider } from "react-i18next";
 import { store } from "@/store";
 
 import ErrorBoundary from "@/components/shared/ErrorBoundary";
+import { Toaster } from "sonner";
 import Page from "@/page";
 
 import { i18n } from "./translations/i18n";
@@ -17,6 +18,7 @@ createRoot(document.getElementById("root")!).render(
     <ErrorBoundary>
       <I18nextProvider i18n={i18n}>
         <Provider store={store}>
+          <Toaster richColors />
           <Page />
         </Provider>
       </I18nextProvider>

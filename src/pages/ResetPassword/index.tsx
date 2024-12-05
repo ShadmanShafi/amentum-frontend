@@ -1,28 +1,83 @@
-import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+import { FormSchema } from "./validation";
 
 const ResetPassword = () => {
+  const navigate = useNavigate();
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof FormSchema>) => {
+    toast.success("Email has been sent successfully");
+
+    console.log("submitted data: ", data);
+  };
+
   return (
     <div className="flex flex-col-reverse w-full h-screen md:flex-row">
-      <div className="w-full bg-center bg-cover md:w-1/2 h-1/2 md:h-full bg-login-graphic"></div>
+      <div className="hidden w-full bg-center bg-cover md:block md:w-1/2 h-1/2 md:h-full bg-login-graphic"></div>
 
-      <div className="flex flex-col items-center justify-center w-full p-8 sm:p-12 md:p-16 lg:p-32 xl:p-56 md:w-1/2 h-1/2 md:h-full">
-        <h1 className="mb-4 text-2xl font-bold">Reset Password</h1>
-        <Input
-          title="Email"
-          type="text"
-          placeholder="Email"
-          className="w-full p-2 mb-4 border border-gray-300 rounded"
-        />
-        <Input
-          title="Password"
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 mb-4 border border-gray-300 rounded"
-        />
-        <Button className="w-full p-2 font-bold text-white bg-blue-500 rounded">
-          Reset
-        </Button>
+      <div className="flex flex-col items-center justify-center w-full h-full bg-right-bottom bg-no-repeat md:w-1/2 bg-login-diamond-graphic">
+        <h1 className="mb-4 text-2xl font-bold text-customTextColor">
+          Reset Password
+        </h1>
+
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-2/3 space-y-6"
+          >
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-customTextColorSecondary">
+                    Email
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex flex-col items-center justify-center gap-4">
+              <Button className="px-10" type="submit">
+                Reset
+              </Button>
+
+              <Button
+                variant="link"
+                type="button"
+                onClick={() => navigate("/login")}
+              >
+                Go back to Login
+              </Button>
+            </div>
+          </form>
+        </Form>
       </div>
     </div>
   );

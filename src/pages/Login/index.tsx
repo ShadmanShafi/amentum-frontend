@@ -5,8 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { z } from "zod";
 
-import { toast } from "@/hooks/use-toast";
-
 import {
   Form,
   FormControl,
@@ -18,15 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-const FormSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid Email address",
-  }),
-
-  password: z.string().min(1, {
-    message: "Please enter a Password",
-  }),
-});
+import { FormSchema } from "./validation";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -42,14 +32,9 @@ const Login = () => {
   });
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    console.log("submitted data: ", data);
+
+    navigate("/server-management/servers/vps");
   };
 
   return (
@@ -57,12 +42,12 @@ const Login = () => {
       <div className="hidden w-full bg-center bg-cover md:block md:w-1/2 h-1/2 md:h-full bg-login-graphic"></div>
 
       <div className="flex flex-col items-center justify-center w-full h-full bg-right-bottom bg-no-repeat md:w-1/2 bg-login-diamond-graphic">
-        <h1 className="mb-4 text-2xl font-bold">Login</h1>
+        <h1 className="mb-4 text-2xl font-bold text-customTextColor">Login</h1>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-2/3 space-y-6"
+            className="w-2/3 space-y-4"
           >
             <FormField
               control={form.control}
@@ -123,12 +108,14 @@ const Login = () => {
                 Forgot Password
               </Button>
 
-              <Button className="text-white " type="submit">
+              <Button className="px-10" type="submit">
                 Sign In
               </Button>
 
               <h1>
-                Don’t have an account?{" "}
+                <span className="text-customTextColor">
+                  Don’t have an account?{" "}
+                </span>
                 <span>
                   <Button
                     className="p-0"
