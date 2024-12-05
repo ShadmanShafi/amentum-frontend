@@ -204,13 +204,14 @@ const SignUp = () => {
                   <FormItem className="flex justify-center p-2 space-x-3 space-y-0">
                     <FormControl>
                       <Checkbox
+                        className="transition-transform transform duration-50 hover:scale-105 active:scale-95"
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
 
-                    <div className="flex flex-col space-y-2 leading-none">
-                      <FormLabel className="text-customTextColorSecondary">
+                    <div className="flex flex-col space-y-2 leading-none transition-transform transform duration-50 hover:scale-105 active:scale-100">
+                      <FormLabel className="cursor-pointer text-customTextColorSecondary">
                         I agree with the terms of use
                       </FormLabel>
                       <FormMessage />
