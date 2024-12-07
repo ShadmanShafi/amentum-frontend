@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { motion } from "motion/react";
 import { z } from "zod";
 
 import {
@@ -204,18 +205,21 @@ const SignUp = () => {
                   <FormItem className="flex justify-center p-2 space-x-3 space-y-0">
                     <FormControl>
                       <Checkbox
-                        className="transition-transform transform duration-50 hover:scale-105 active:scale-95"
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
 
-                    <div className="flex flex-col space-y-2 leading-none transition-transform transform duration-50 hover:scale-105 active:scale-100">
+                    <motion.div
+                      className="flex flex-col space-y-2 leading-none"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 1 }}
+                    >
                       <FormLabel className="cursor-pointer text-customTextColorSecondary">
                         I agree with the terms of use
                       </FormLabel>
-                      <FormMessage />
-                    </div>
+                    </motion.div>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
