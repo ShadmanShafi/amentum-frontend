@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
@@ -19,15 +20,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { AnimatedAuthFlowForm } from "@/components/shared/AnimatedPages";
 import AuthPageContainer from "@/components/shared/AuthPageContainer";
 
-import { FormSchema } from "./validation";
+import { createFormSchema } from "./validation";
 
 const SignUp = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const formSchema = createFormSchema(t);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -39,7 +43,7 @@ const SignUp = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log("submitted data: ", data);
 
     navigate("/login");
@@ -54,7 +58,7 @@ const SignUp = () => {
             className="px-4 space-y-4 md:px-10"
           >
             <h1 className="mb-4 text-2xl font-bold text-center text-customTextColor">
-              Sign Up
+              {t("registration.header")}
             </h1>
 
             <div className="flex flex-col gap-4 sm:flex-row">
@@ -64,7 +68,7 @@ const SignUp = () => {
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel className="text-customTextColorSecondary">
-                      First Name
+                      {t("registration.firstName")}
                     </FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
@@ -80,7 +84,7 @@ const SignUp = () => {
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel className="text-customTextColorSecondary">
-                      Last Name
+                      {t("registration.lastName")}
                     </FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
@@ -98,7 +102,7 @@ const SignUp = () => {
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel className="text-customTextColorSecondary">
-                      Email
+                      {t("registration.email")}
                     </FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
@@ -114,7 +118,7 @@ const SignUp = () => {
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel className="text-customTextColorSecondary">
-                      Phone Number
+                      {t("registration.phoneNo")}
                     </FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
@@ -132,7 +136,7 @@ const SignUp = () => {
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel className="text-customTextColorSecondary">
-                      Password
+                      {t("registration.password")}
                     </FormLabel>
                     <FormControl>
                       <div className="relative">
@@ -166,7 +170,7 @@ const SignUp = () => {
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel className="text-customTextColorSecondary">
-                      Confirm Password
+                      {t("registration.confirmPassword")}
                     </FormLabel>
                     <FormControl>
                       <div className="relative">
@@ -209,7 +213,7 @@ const SignUp = () => {
 
                   <div className="flex flex-col gap-1">
                     <FormLabel className="cursor-pointer text-customTextColorSecondary">
-                      I agree with the terms of use
+                      {t("registration.consent")}
                     </FormLabel>
                     <FormMessage />
                   </div>
@@ -219,12 +223,12 @@ const SignUp = () => {
 
             <div className="flex flex-col items-center justify-center gap-4">
               <Button className="px-10" type="submit">
-                Sign Up
+                {t("registration.signUp")}
               </Button>
 
               <h1 className="text-center">
                 <span className="text-customTextColor">
-                  Already have an account?{" "}
+                  {t("registration.alreadyHaveAccount")}{" "}
                 </span>
                 <span>
                   <Button
@@ -233,7 +237,7 @@ const SignUp = () => {
                     type="button"
                     onClick={() => navigate("/login")}
                   >
-                    Click here to log in
+                    {t("registration.clickToSignIn")}
                   </Button>
                 </span>
               </h1>

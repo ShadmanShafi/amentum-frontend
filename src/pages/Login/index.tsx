@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -18,22 +19,25 @@ import { Button } from "@/components/ui/button";
 import { AnimatedAuthFlowForm } from "@/components/shared/AnimatedPages";
 import AuthPageContainer from "@/components/shared/AuthPageContainer";
 
-import { FormSchema } from "./validation";
+import { createFormSchema } from "./validation";
 
 const Login = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const formSchema = createFormSchema(t);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log("submitted data: ", data);
 
     navigate("/server-management/servers/vps");
@@ -48,7 +52,7 @@ const Login = () => {
             className="px-4 space-y-4 md:px-10"
           >
             <h1 className="mb-4 text-2xl font-bold text-center text-customTextColor">
-              Login
+              {t("login.header")}
             </h1>
 
             <FormField
@@ -57,7 +61,7 @@ const Login = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-customTextColorSecondary">
-                    Email
+                    {t("login.email")}
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="" {...field} />
@@ -73,7 +77,7 @@ const Login = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-customTextColorSecondary">
-                    Password
+                    {t("login.password")}
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
@@ -107,16 +111,16 @@ const Login = () => {
                 type="button"
                 onClick={() => navigate("/reset-password")}
               >
-                Forgot Password
+                {t("login.forgotPassword")}
               </Button>
 
               <Button className="px-10" type="submit">
-                Sign In
+                {t("login.signIn")}
               </Button>
 
               <h1 className="text-center">
                 <span className="text-customTextColor">
-                  Don’t have an account?{" "}
+                  {t("login.noAccount")}{" "}
                 </span>
                 <span>
                   <Button
@@ -125,7 +129,7 @@ const Login = () => {
                     type="button"
                     onClick={() => navigate("/registration")}
                   >
-                    Click here to sign up
+                    {t("login.clickToSignUp")}
                   </Button>
                 </span>
               </h1>

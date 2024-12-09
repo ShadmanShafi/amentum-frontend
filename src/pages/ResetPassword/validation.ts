@@ -1,7 +1,9 @@
 import { z } from "zod";
 
-export const FormSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid Email address",
-  }),
-});
+export const createFormSchema = (t: (key: string) => string) => {
+  return z.object({
+    email: z.string().email({
+      message: t("resetPassword.emailValidation"),
+    }),
+  });
+};
