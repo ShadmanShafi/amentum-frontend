@@ -42,13 +42,15 @@ const Login = () => {
   return (
     <AuthPageContainer>
       <AnimatedAuthFlowForm>
-        <h1 className="mb-4 text-2xl font-bold text-customTextColor">Login</h1>
-
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="p-4 space-y-4 md:p-10"
+            className="px-4 space-y-4 md:px-10"
           >
+            <h1 className="mb-4 text-2xl font-bold text-center text-customTextColor">
+              Login
+            </h1>
+
             <FormField
               control={form.control}
               name="email"

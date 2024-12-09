@@ -38,15 +38,15 @@ const ResetPassword = () => {
   return (
     <AuthPageContainer>
       <AnimatedAuthFlowForm>
-        <h1 className="mb-4 text-2xl font-bold text-customTextColor">
-          Reset Password
-        </h1>
-
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-2/3 space-y-6"
+            className="px-4 space-y-4 md:px-10"
           >
+            <h1 className="mb-4 text-2xl font-bold text-center text-customTextColor">
+              Reset Password
+            </h1>
+
             <FormField
               control={form.control}
               name="email"
