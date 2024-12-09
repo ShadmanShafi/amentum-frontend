@@ -1,8 +1,8 @@
-export const AmentumLogo = () => {
+export const AmentumLogo = ({ scale = 1 }: { scale?: number }) => {
   return (
     <svg
-      width="273"
-      height="72"
+      width={`${273 * scale}`}
+      height={`${72 * scale}`}
       viewBox="0 0 273 72"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

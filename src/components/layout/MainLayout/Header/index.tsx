@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { ChevronRight, Menu } from "lucide-react";
 
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
@@ -15,77 +16,94 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronRight } from "lucide-react";
 
 export const Header: FC = (): JSX.Element => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isMobile } = useSidebar();
+  const { isMobile, toggleSidebar } = useSidebar();
   const { language, changeLanguage } = useLanguage();
 
   return (
-    <div className="flex items-center h-full bg-white justify-evenly">
+    <div className="flex items-center justify-between h-full px-4 bg-white md:justify-evenly md:px-8">
       {isMobile ? (
-        <div className="items-start w-full">
-          <SidebarTrigger />
-        </div>
+        <Button className="ms-1" variant={"ghost"} onClick={toggleSidebar}>
+          <Menu />
+        </Button>
       ) : null}
 
-      <div>
-        <AmentumLogo />
+      <div className="flex items-center">
+        <AmentumLogo scale={isMobile ? 0.6 : 1} />
       </div>
 
-      <div className="flex flex-row gap-8">
-        <div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild className="group/collapsible">
-              <Button variant="ghost" className="border-0">
-                {language === "de" ? <FlagDe /> : <FlagEn />}
-                {language === "de" ? "Deutsch" : "English"}
-                <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-              </Button>
-            </DropdownMenuTrigger>
+      <div className="flex-row hidden lg:gap-8 md:flex">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild className="group/collapsible">
+            <Button variant="ghost" className="border-0">
+              {language === "de" ? <FlagDe /> : <FlagEn />}
+              {language === "de" ? "Deutsch" : "English"}
+              <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+            </Button>
+          </DropdownMenuTrigger>
 
-            <DropdownMenuContent className="w-40">
-              <DropdownMenuGroup>
-                {language === "de" ? (
-                  <DropdownMenuItem onClick={() => changeLanguage("en")}>
-                    <FlagEn />
-                    English
-                  </DropdownMenuItem>
-                ) : (
-                  <DropdownMenuItem onClick={() => changeLanguage("de")}>
-                    <FlagDe />
-                    Deutsch
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+          <DropdownMenuContent className="w-40">
+            <DropdownMenuGroup>
+              {language === "de" ? (
+                <DropdownMenuItem onClick={() => changeLanguage("en")}>
+                  <FlagEn />
+                  English
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem onClick={() => changeLanguage("de")}>
+                  <FlagDe />
+                  Deutsch
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-        <div>
-          <Button disabled variant="ghost">
-            Home
-          </Button>
-        </div>
+        <Button disabled variant="ghost">
+          {t("layout.header.home")}
+        </Button>
 
-        <div>
-          <Button disabled variant="ghost">
-            {t("hello")}
-          </Button>
-        </div>
+        <Button disabled variant="ghost">
+          {t("layout.header.services")}
+        </Button>
 
-        <div>
-          <Button
-            size="sm"
-            className="px-4 font-bold rounded-3xl"
-            onClick={() => navigate("/login")}
-          >
-            Log out
-          </Button>
-        </div>
+        <Button
+          className="px-8 font-bold rounded-3xl"
+          onClick={() => navigate("/login")}
+        >
+          {t("layout.header.logout")}
+        </Button>
       </div>
+
+      {isMobile ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild className="group/collapsible">
+            <Button variant="ghost" className="border-0">
+              {language === "de" ? <FlagDe /> : <FlagEn />}
+              <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent className="w-40">
+            <DropdownMenuGroup>
+              {language === "de" ? (
+                <DropdownMenuItem onClick={() => changeLanguage("en")}>
+                  <FlagEn />
+                  English
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem onClick={() => changeLanguage("de")}>
+                  <FlagDe />
+                  Deutsch
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : null}
     </div>
   );
 };

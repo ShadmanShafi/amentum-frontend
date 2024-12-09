@@ -45,6 +45,14 @@ const translation = {
       alreadyHaveAccount: "Already have an account?",
       clickToSignIn: "Click here to log in",
     },
+
+    layout: {
+      header: {
+        home: "Home",
+        services: "Services",
+        logout: "Log Out",
+      },
+    },
   },
 };
 
