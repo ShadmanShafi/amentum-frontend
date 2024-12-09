@@ -52,6 +52,15 @@ const translation = {
         services: "Services",
         logout: "Log Out",
       },
+      sidebar: {
+        home: "Home",
+        serverManagement: "Server Management",
+        servers: "Servers",
+        vps: "VPS",
+        vds: "VDS",
+        account: "Account",
+        support: "Support",
+      },
     },
   },
 };

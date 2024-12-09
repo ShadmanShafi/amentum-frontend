@@ -53,7 +53,7 @@ const Vps = () => {
         Servers & Hosting
       </h1>
 
-      <Separator className="mt-8 mb-4" />
+      <Separator className="mt-6 mb-4" />
 
       <Table className="border">
         <TableHeader>
@@ -89,7 +89,7 @@ const Vps = () => {
             <TableRow
               key={row.id}
               onClick={() => handleRowClick(row.original.key)}
-              className="text-xs cursor-pointer hover:bg-customTableRowHoverBg"
+              className="text-xs cursor-pointer hover:bg-customTableRowHoverBg text-customTextColor"
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id} className="px-5 py-4 border">

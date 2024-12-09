@@ -1,4 +1,12 @@
 import { ColumnDef } from "@tanstack/react-table";
+import {
+  IconStatusDisabledInactive,
+  IconStatusDisabledActive,
+  IconStatusWarningInactive,
+  IconStatusWarningActive,
+  IconStatusEnabledInactive,
+  IconStatusEnabledActive,
+} from "@/assets/Icons";
 
 export const rows = [
   {
@@ -163,6 +171,32 @@ export const columns: ColumnDef<(typeof rows)[0]>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      const status = row.original.status;
+
+      return (
+        <div className="flex items-center space-x-2">
+          {row.original.status === "Stopped" ? (
+            <IconStatusDisabledActive />
+          ) : (
+            <IconStatusDisabledInactive />
+          )}
+
+          {row.original.status === "Pause" ? (
+            <IconStatusWarningActive />
+          ) : (
+            <IconStatusWarningInactive />
+          )}
+
+          {row.original.status === "Running" ? (
+            <IconStatusEnabledActive />
+          ) : (
+            <IconStatusEnabledInactive />
+          )}
+          <span>{status}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "ipAddress",

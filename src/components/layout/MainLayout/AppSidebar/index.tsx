@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import { ChevronRight, Menu } from "lucide-react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { ChevronRight, Menu, LogOut } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +21,7 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 
 import {
@@ -31,7 +33,9 @@ import {
 } from "@/assets/Icons";
 
 export const AppSidebar: FC = (): JSX.Element => {
+  const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const { isMobile, toggleSidebar } = useSidebar();
 
   const [activeItem, setActiveItem] = useState<string | null>(null);
@@ -63,7 +67,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                   className="justify-start w-full"
                 >
                   <IconHome />
-                  <span>Home</span>
+                  <span>{t("layout.sidebar.home")}</span>
                 </Button>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -86,7 +90,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                 <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverBg">
                   <IconServerManagement />
                   <span className="me-2"></span>
-                  {"Serversteuerung"}
+                  {t("layout.sidebar.serverManagement")}
                   <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
@@ -110,7 +114,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                             <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverBg">
                               <IconServers />
                               <span className="me-2"></span>
-                              {"Servers"}
+                              {t("layout.sidebar.servers")}
                               <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
                             </CollapsibleTrigger>
                           </SidebarGroupLabel>
@@ -129,7 +133,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                                     onClick={() => handleMenuItemClick("vps")}
                                   >
                                     <NavLink to="/server-management/servers/vps">
-                                      <span>VPS</span>
+                                      <span>{t("layout.sidebar.vps")}</span>
                                     </NavLink>
                                   </SidebarMenuButton>
                                 </SidebarMenuSubItem>
@@ -147,7 +151,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                                       disabled
                                       className="justify-start w-full"
                                     >
-                                      <span>VDS</span>
+                                      <span>{t("layout.sidebar.vds")}</span>
                                     </Button>
                                   </SidebarMenuButton>
                                 </SidebarMenuSubItem>
@@ -175,7 +179,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                   className="justify-start w-full"
                 >
                   <IconAccount />
-                  <span>Account</span>
+                  <span>{t("layout.sidebar.account")}</span>
                 </Button>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -193,7 +197,7 @@ export const AppSidebar: FC = (): JSX.Element => {
                   className="justify-start w-full"
                 >
                   <IconSupport />
-                  <span>Support</span>
+                  <span>{t("layout.sidebar.support")}</span>
                 </Button>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -220,6 +224,18 @@ export const AppSidebar: FC = (): JSX.Element => {
           </SidebarGroup>
         </SidebarMenu>
       </SidebarContent>
+
+      {isMobile ? (
+        <SidebarFooter>
+          <Button
+            variant="ghost"
+            className="hover:bg-customMenuItemHoverBg hover:text-white active:bg-customMenuItemHoverBg"
+            onClick={() => navigate("/login")}
+          >
+            <LogOut />
+          </Button>
+        </SidebarFooter>
+      ) : null}
     </Sidebar>
   );
 };
