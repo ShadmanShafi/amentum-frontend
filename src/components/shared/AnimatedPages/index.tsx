@@ -12,7 +12,7 @@ export const AnimatedAuthFlowForm = ({ children }: Props) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 0 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="flex items-center justify-center h-screen"
+      className="flex justify-center sm:items-center md:h-screen"
     >
       {children}
     </motion.div>

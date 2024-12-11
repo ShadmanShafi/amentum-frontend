@@ -6,6 +6,7 @@ import { mainMenuList } from "./mainMenuList";
 import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp";
 import ResetPassword from "@/pages/ResetPassword";
+import NotFound404 from "@/components/shared/404";
 
 export const routeList: RouteObject[] = [
   {
@@ -27,6 +28,6 @@ export const routeList: RouteObject[] = [
   },
   {
     path: "*",
-    element: <div>Not Found</div>,
+    element: <NotFound404 />,
   },
 ];

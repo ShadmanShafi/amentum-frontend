@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router-dom";
 
-import Home from "@/pages/Home";
+// import Home from "@/pages/Home";
 import Vps from "@/pages/Vps";
 import VpsDetails from "@/pages/Vps/Details";
 
@@ -11,7 +11,7 @@ export const mainMenuList: RouteObject[] = [
       {
         path: "/",
         index: true,
-        element: <Home />,
+        element: <Vps />,
       },
       {
         path: "server-management/servers/vps",
