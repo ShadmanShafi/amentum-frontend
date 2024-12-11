@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowDownAz, ArrowDownZA } from "lucide-react";
+import {
+  ArrowDownAz,
+  ArrowDownZA,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { Table as ReactTable } from "@tanstack/react-table";
 
-import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -11,6 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 import {
   flexRender,
@@ -22,20 +29,113 @@ import {
 } from "@tanstack/react-table";
 
 import { columns, rows } from "./constants";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+
+const Pagination = ({ table }: { table: ReactTable<(typeof rows)[0]> }) => {
+  const pageCount = table.getPageCount();
+  const currentPage = table.getState().pagination.pageIndex + 1;
+  const pageNumbers = [];
+
+  for (let i = 1; i <= pageCount; i++) {
+    pageNumbers.push(i);
+  }
+
+  const renderPageNumbers = () => {
+    const maxPagesToShow = 5;
+    const pages = [];
+
+    if (pageCount <= maxPagesToShow) {
+      for (let i = 1; i <= pageCount; i++) {
+        pages.push(
+          <Button
+            key={i}
+            variant={currentPage === i ? "default" : "outline"}
+            size="sm"
+            onClick={() => table.setPageIndex(i - 1)}
+          >
+            {i}
+          </Button>
+        );
+      }
+    } else {
+      pages.push(
+        <Button
+          key={1}
+          variant={currentPage === 1 ? "default" : "outline"}
+          size="sm"
+          onClick={() => table.setPageIndex(0)}
+        >
+          1
+        </Button>
+      );
+
+      if (currentPage > 3) {
+        pages.push(<span key="ellipsis1">...</span>);
+      }
+
+      const startPage = Math.max(2, currentPage - 1);
+      const endPage = Math.min(pageCount - 1, currentPage + 1);
+
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(
+          <Button
+            key={i}
+            variant={currentPage === i ? "default" : "outline"}
+            size="sm"
+            onClick={() => table.setPageIndex(i - 1)}
+          >
+            {i}
+          </Button>
+        );
+      }
+
+      if (currentPage < pageCount - 2) {
+        pages.push(<span key="ellipsis2">...</span>);
+      }
+
+      pages.push(
+        <Button
+          key={pageCount}
+          variant={currentPage === pageCount ? "default" : "outline"}
+          size="sm"
+          onClick={() => table.setPageIndex(pageCount - 1)}
+        >
+          {pageCount}
+        </Button>
+      );
+    }
+
+    return pages;
+  };
+
+  return (
+    <div className="flex items-center space-x-2">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => table.previousPage()}
+        disabled={!table.getCanPreviousPage()}
+      >
+        <ChevronLeft />
+      </Button>
+
+      {renderPageNumbers()}
+
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => table.nextPage()}
+        disabled={!table.getCanNextPage()}
+      >
+        <ChevronRight />
+      </Button>
+    </div>
+  );
+};
 
 const Vps = () => {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
 
   const handleRowClick = (id: string) => {
     navigate(`/server-management/servers/vps/${id}`);
@@ -55,11 +155,6 @@ const Vps = () => {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(
-    table.getCoreRowModel().rows.length / itemsPerPage
-  );
-
   return (
     <div className="py-6 px-14">
       <h1 className="text-3xl font-semibold tracking-tight scroll-m-20 text-customTextColor">
@@ -76,7 +171,7 @@ const Vps = () => {
                 <TableHead
                   key={header.id}
                   onClick={header.column.getToggleSortingHandler()}
-                  className="px-5 py-2 text-base font-semibold border cursor-pointer select-none text-customTableHeaderColor bg-customTableHeaderBg"
+                  className="px-2 py-1 text-sm font-semibold border cursor-pointer select-none sm:text-base sm:px-5 sm:py-2 text-customTableHeaderColor bg-customTableHeaderBg"
                 >
                   <div className="flex items-center">
                     {header.isPlaceholder
@@ -105,7 +200,10 @@ const Vps = () => {
               className="text-xs cursor-pointer hover:bg-customTableRowHoverBg text-customTextColor"
             >
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id} className="px-5 py-4 border">
+                <TableCell
+                  key={cell.id}
+                  className="px-2 py-1 border sm:px-5 sm:py-4"
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
@@ -114,46 +212,12 @@ const Vps = () => {
         </TableBody>
       </Table>
 
-      <div className="flex items-center py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getRowModel().rows.length} of{" "}
-          {table.getCoreRowModel().rows.length} rows
+      <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 space-y-2 sm:flex-row sm:space-y-0">
+        <div className="text-sm text-customTextColorSecondary">
+          Total {table.getCoreRowModel().rows.length} rows
         </div>
 
-        <Pagination className="justify-end">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (currentPage > 1) setCurrentPage(currentPage - 1);
-                }}
-              />
-            </PaginationItem>
-            {[...Array(totalPages)].map((_, index) => (
-              <PaginationItem key={index}>
-                <PaginationLink
-                  href="#"
-                  isActive={index + 1 === currentPage}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setCurrentPage(index + 1);
-                  }}
-                >
-                  {index + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-            <PaginationItem>
-              <PaginationNext
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-                }}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <Pagination table={table} />
       </div>
     </div>
   );

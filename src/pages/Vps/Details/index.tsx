@@ -25,7 +25,7 @@ const VpsDetails = () => {
 
         <div className="flex flex-col gap-3">
           <h1 className="text-4xl font-bold tracking-tight scroll-m-20 text-customTextColor">
-            Mitarbeiter-Server - {id}
+            {id}
           </h1>
 
           <div className="flex gap-2">

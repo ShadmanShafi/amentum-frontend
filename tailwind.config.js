@@ -21,6 +21,7 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         customContainerBg: "#e9ecef",
+        customSidebarBg: "#082844",
         customTextColor: "#232D42",
         customTextColorSecondary: "#8A92A6",
         customTableHeaderBg: "#F8F9FA",

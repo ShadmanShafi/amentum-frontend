@@ -8,148 +8,25 @@ import {
   IconStatusEnabledActive,
 } from "@/assets/Icons";
 
-export const rows = [
-  {
-    key: "1",
-    name: "Mitarbeiter-Server",
-    displayName: "Mitarbeiter",
-    productType: "VPS 4 SSD",
-    defaultUser: "Admin",
-    status: "Running",
-    ipAddress: "62.84.123.456",
-    region: "EU",
-  },
-  {
-    key: "2",
-    name: "Mitarbeiter-Server 2",
-    displayName: "Mitarbeiter 2",
-    productType: "VPS 2 SSD (ohne Setup)",
-    defaultUser: "Admin",
-    status: "Pause",
-    ipAddress: "213.166.15.98",
-    region: "EU",
-  },
-  {
-    key: "3",
-    name: "Mitarbeiter-Server 3",
-    displayName: "Mitarbeiter 3",
-    productType: "VPS 0 SSD",
-    defaultUser: "Root",
-    status: "Stopped",
-    ipAddress: "84.247.188.24",
-    region: "EU",
-  },
-  {
-    key: "4",
-    name: "Mitarbeiter-Server 2",
-    displayName: "Mitarbeiter 2",
-    productType: "VPS 2 SSD (ohne Setup)",
-    defaultUser: "Admin",
-    status: "Running",
-    ipAddress: "213.166.15.98",
-    region: "EU",
-  },
-  {
-    key: "5",
-    name: "Mitarbeiter-Server 3",
-    displayName: "Mitarbeiter 3",
-    productType: "VPS 0 SSD",
-    defaultUser: "Root",
-    status: "Running",
-    ipAddress: "84.247.188.24",
-    region: "EU",
-  },
-  {
-    key: "6",
-    name: "Mitarbeiter-Server 2",
-    displayName: "Mitarbeiter 2",
-    productType: "VPS 2 SSD (ohne Setup)",
-    defaultUser: "Admin",
-    status: "Running",
-    ipAddress: "213.166.15.98",
-    region: "EU",
-  },
-  {
-    key: "7",
-    name: "Mitarbeiter-Server 3",
-    displayName: "Mitarbeiter 3",
-    productType: "VPS 0 SSD",
-    defaultUser: "Root",
-    status: "Running",
-    ipAddress: "84.247.188.24",
-    region: "EU",
-  },
-  {
-    key: "8",
-    name: "Mitarbeiter-Server",
-    displayName: "Mitarbeiter",
-    productType: "VPS 4 SSD",
-    defaultUser: "Admin",
-    status: "Running",
-    ipAddress: "62.84.123.456",
-    region: "EU",
-  },
-  {
-    key: "9",
-    name: "Mitarbeiter-Server 2",
-    displayName: "Mitarbeiter 2",
-    productType: "VPS 2 SSD (ohne Setup)",
-    defaultUser: "Admin",
-    status: "Pause",
-    ipAddress: "213.166.15.98",
-    region: "EU",
-  },
-  {
-    key: "10",
-    name: "Mitarbeiter-Server 3",
-    displayName: "Mitarbeiter 3",
-    productType: "VPS 0 SSD",
-    defaultUser: "Root",
-    status: "Stopped",
-    ipAddress: "84.247.188.24",
-    region: "EU",
-  },
-  {
-    key: "11",
-    name: "Mitarbeiter-Server 2",
-    displayName: "Mitarbeiter 2",
-    productType: "VPS 2 SSD (ohne Setup)",
-    defaultUser: "Admin",
-    status: "Running",
-    ipAddress: "213.166.15.98",
-    region: "EU",
-  },
-  {
-    key: "12",
-    name: "Mitarbeiter-Server 3",
-    displayName: "Mitarbeiter 3",
-    productType: "VPS 0 SSD",
-    defaultUser: "Root",
-    status: "Running",
-    ipAddress: "84.247.188.24",
-    region: "EU",
-  },
-  {
-    key: "13",
-    name: "Mitarbeiter-Server 2",
-    displayName: "Mitarbeiter 2",
-    productType: "VPS 2 SSD (ohne Setup)",
-    defaultUser: "Admin",
-    status: "Running",
-    ipAddress: "213.166.15.98",
-    region: "EU",
-  },
-  {
-    key: "14",
-    name: "Mitarbeiter-Server 3",
-    displayName: "Mitarbeiter 3",
-    productType: "VPS 0 SSD",
-    defaultUser: "Root",
-    status: "Running",
-    ipAddress: "84.247.188.24",
-    region: "EU",
-  },
-];
+const generateDummyData = (count: number) => {
+  const statuses = ["Running", "Pause", "Stopped"];
+  const regions = ["EU", "US", "ASIA"];
+  const productTypes = ["VPS 4 SSD", "VPS 2 SSD (ohne Setup)", "VPS 0 SSD"];
+  const defaultUsers = ["Admin", "Root", "User"];
+
+  return Array.from({ length: count }, (_, index) => ({
+    key: (index + 1).toString(),
+    name: `Server-${index + 1}`,
+    displayName: `Display-${index + 1}`,
+    productType: productTypes[index % productTypes.length],
+    defaultUser: defaultUsers[index % defaultUsers.length],
+    status: statuses[index % statuses.length],
+    ipAddress: `192.168.1.${index + 1}`,
+    region: regions[index % regions.length],
+  }));
+};
+
+export const rows = generateDummyData(54);
 
 export const columns: ColumnDef<(typeof rows)[0]>[] = [
   {

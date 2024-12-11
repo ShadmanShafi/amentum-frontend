@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { useIsMobile } from "@/hooks/use-mobile";
+
 import {
   Form,
   FormControl,
@@ -18,11 +20,13 @@ import { Button } from "@/components/ui/button";
 import { AnimatedAuthFlowForm } from "@/components/shared/AnimatedPages";
 import AuthPageContainer from "@/components/shared/AuthPageContainer";
 
+import { AmentumLogo } from "@/assets/AmentumLogo";
 import { createFormSchema } from "./validation";
 
 const ResetPassword = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const formSchema = createFormSchema(t);
 
@@ -47,6 +51,10 @@ const ResetPassword = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="px-4 space-y-4 md:px-10"
           >
+            <div className="flex justify-center mb-14">
+              <AmentumLogo scale={isMobile ? 0.6 : 0.8} />
+            </div>
+
             <h1 className="mb-4 text-2xl font-bold text-center text-customTextColor">
               {t("resetPassword.header")}
             </h1>

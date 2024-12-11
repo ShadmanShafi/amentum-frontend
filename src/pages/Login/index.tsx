@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import { useIsMobile } from "@/hooks/use-mobile";
+
 import {
   Form,
   FormControl,
@@ -19,11 +21,13 @@ import { Button } from "@/components/ui/button";
 import { AnimatedAuthFlowForm } from "@/components/shared/AnimatedPages";
 import AuthPageContainer from "@/components/shared/AuthPageContainer";
 
+import { AmentumLogo } from "@/assets/AmentumLogo";
 import { createFormSchema } from "./validation";
 
 const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -51,6 +55,10 @@ const Login = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="px-4 space-y-4 md:px-10"
           >
+            <div className="flex justify-center mb-14">
+              <AmentumLogo scale={isMobile ? 0.6 : 0.8} />
+            </div>
+
             <h1 className="mb-4 text-2xl font-bold text-center text-customTextColor">
               {t("login.header")}
             </h1>
