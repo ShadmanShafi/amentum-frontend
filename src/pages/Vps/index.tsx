@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowUp, ArrowUpDown } from "lucide-react";
+import { ArrowDownAz, ArrowDownZA } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   Table,
@@ -23,11 +22,20 @@ import {
 } from "@tanstack/react-table";
 
 import { columns, rows } from "./constants";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const Vps = () => {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleRowClick = (id: string) => {
     navigate(`/server-management/servers/vps/${id}`);
@@ -46,6 +54,11 @@ const Vps = () => {
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
+
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(
+    table.getCoreRowModel().rows.length / itemsPerPage
+  );
 
   return (
     <div className="py-6 px-14">
@@ -74,8 +87,8 @@ const Vps = () => {
                         )}
                     {header.column.getIsSorted() &&
                       {
-                        asc: <ArrowUp className="w-4 h-4 ml-2" />,
-                        desc: <ArrowUpDown className="w-4 h-4 ml-2" />,
+                        asc: <ArrowDownAz className="w-4 h-4 ml-2" />,
+                        desc: <ArrowDownZA className="w-4 h-4 ml-2" />,
                       }[header.column.getIsSorted() as "asc" | "desc"]}
                   </div>
                 </TableHead>
@@ -101,29 +114,46 @@ const Vps = () => {
         </TableBody>
       </Table>
 
-      <div className="flex items-center justify-between py-4">
+      <div className="flex items-center py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getRowModel().rows.length} of{" "}
           {table.getCoreRowModel().rows.length} rows
         </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+
+        <Pagination className="justify-end">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (currentPage > 1) setCurrentPage(currentPage - 1);
+                }}
+              />
+            </PaginationItem>
+            {[...Array(totalPages)].map((_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  href="#"
+                  isActive={index + 1 === currentPage}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentPage(index + 1);
+                  }}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationNext
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );
