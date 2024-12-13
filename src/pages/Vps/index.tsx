@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 import {
   ArrowDownAz,
   ArrowDownZA,
@@ -46,26 +47,48 @@ const Pagination = ({ table }: { table: ReactTable<(typeof rows)[0]> }) => {
     if (pageCount <= maxPagesToShow) {
       for (let i = 1; i <= pageCount; i++) {
         pages.push(
-          <Button
+          <motion.div
             key={i}
-            variant={currentPage === i ? "default" : "outline"}
-            size="sm"
-            onClick={() => table.setPageIndex(i - 1)}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
           >
-            {i}
-          </Button>
+            <Button
+              variant={currentPage === i ? "default" : "outline"}
+              className={
+                currentPage === i
+                  ? "text-white bg-customSidebarBg hover:bg-customSidebarBg"
+                  : ""
+              }
+              size="sm"
+              onClick={() => table.setPageIndex(i - 1)}
+            >
+              {i}
+            </Button>
+          </motion.div>
         );
       }
     } else {
       pages.push(
-        <Button
+        <motion.div
           key={1}
-          variant={currentPage === 1 ? "default" : "outline"}
-          size="sm"
-          onClick={() => table.setPageIndex(0)}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
         >
-          1
-        </Button>
+          <Button
+            variant={currentPage === 1 ? "default" : "outline"}
+            className={
+              currentPage === 1
+                ? "text-white bg-customSidebarBg hover:bg-customSidebarBg"
+                : ""
+            }
+            size="sm"
+            onClick={() => table.setPageIndex(0)}
+          >
+            1
+          </Button>
+        </motion.div>
       );
 
       if (currentPage > 3) {
@@ -77,14 +100,25 @@ const Pagination = ({ table }: { table: ReactTable<(typeof rows)[0]> }) => {
 
       for (let i = startPage; i <= endPage; i++) {
         pages.push(
-          <Button
+          <motion.div
             key={i}
-            variant={currentPage === i ? "default" : "outline"}
-            size="sm"
-            onClick={() => table.setPageIndex(i - 1)}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
           >
-            {i}
-          </Button>
+            <Button
+              variant={currentPage === i ? "default" : "outline"}
+              className={
+                currentPage === i
+                  ? "text-white bg-customSidebarBg hover:bg-customSidebarBg"
+                  : ""
+              }
+              size="sm"
+              onClick={() => table.setPageIndex(i - 1)}
+            >
+              {i}
+            </Button>
+          </motion.div>
         );
       }
 
@@ -93,14 +127,25 @@ const Pagination = ({ table }: { table: ReactTable<(typeof rows)[0]> }) => {
       }
 
       pages.push(
-        <Button
+        <motion.div
           key={pageCount}
-          variant={currentPage === pageCount ? "default" : "outline"}
-          size="sm"
-          onClick={() => table.setPageIndex(pageCount - 1)}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
         >
-          {pageCount}
-        </Button>
+          <Button
+            variant={currentPage === pageCount ? "default" : "outline"}
+            className={
+              currentPage === pageCount
+                ? "text-white bg-customSidebarBg hover:bg-customSidebarBg"
+                : ""
+            }
+            size="sm"
+            onClick={() => table.setPageIndex(pageCount - 1)}
+          >
+            {pageCount}
+          </Button>
+        </motion.div>
       );
     }
 
