@@ -49,7 +49,7 @@ const ResetPassword = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="px-4 space-y-4 md:px-10"
+            className="px-4 space-y-4 xl:w-1/2 lg:w-2/3 md:px-10"
           >
             <div className="flex justify-center mb-14">
               <AmentumLogo scale={isMobile ? 0.6 : 0.8} />
@@ -59,6 +59,12 @@ const ResetPassword = () => {
               {t("resetPassword.header")}
             </h1>
 
+            <h6 className="text-customTextColorSecondary text-wrap">
+              Enter your email address and we’ll send you an email with
+              instructions to reset your password
+            </h6>
+
+            <h6 className="text-customTextColorSecondary text-wrap"></h6>
             <FormField
               control={form.control}
               name="email"

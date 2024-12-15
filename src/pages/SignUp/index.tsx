@@ -59,7 +59,7 @@ const SignUp = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="px-4 mt-4 space-y-4 md:px-10"
+            className="px-4 mt-4 space-y-4 md:px-10 xl:w-1/2 lg:w-2/3"
           >
             <div className="flex justify-center mb-14">
               <AmentumLogo scale={isMobile ? 0.6 : 0.8} />
