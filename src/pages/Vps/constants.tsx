@@ -26,7 +26,7 @@ const generateDummyData = (count: number) => {
   }));
 };
 
-export const rows = generateDummyData(54);
+export const rows = generateDummyData(121);
 
 export const columns: ColumnDef<(typeof rows)[0]>[] = [
   {

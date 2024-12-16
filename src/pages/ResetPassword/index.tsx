@@ -59,12 +59,11 @@ const ResetPassword = () => {
               {t("resetPassword.header")}
             </h1>
 
-            <h6 className="text-customTextColorSecondary text-wrap">
+            <h6 className="text-center text-customTextColorSecondary">
               Enter your email address and we’ll send you an email with
               instructions to reset your password
             </h6>
 
-            <h6 className="text-customTextColorSecondary text-wrap"></h6>
             <FormField
               control={form.control}
               name="email"

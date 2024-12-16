@@ -1,12 +1,15 @@
 import * as React from "react";
-import { motion, MotionProps } from "motion/react";
+import { motion, MotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-// Extend the props to include the motion properties
-type InputProps = React.ComponentProps<"input"> & MotionProps;
+// Extend the props to include the motion properties and custom borderColor prop
+type InputProps = React.ComponentProps<"input"> &
+  MotionProps & {
+    borderColor?: string;
+  };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, borderColor = "hsl(var(--primary))", ...props }, ref) => {
     return (
       <motion.input
         type={type}
@@ -29,7 +32,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         }} // Animate from small to large, sliding into position
         whileFocus={{
           scale: 1.02, // Slightly grow when focused
-          borderColor: "hsl(var(--primary))", // Green border color on focus
+          borderColor: borderColor, // Custom border color on focus
           transition: {
             duration: 0.1,
             ease: "easeOut",
@@ -45,7 +48,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         }}
         // Optional: Add a smooth border color transition on focus
         style={{
-          borderColor: "hsl(var(--primary))", // Default border color
+          borderColor: borderColor, // Default border color
           transition: "border-color 0.1s ease", // Smooth transition
         }}
       />

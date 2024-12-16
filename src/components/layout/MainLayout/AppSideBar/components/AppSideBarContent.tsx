@@ -104,7 +104,7 @@ export const AppSideBarContent: FC = (): JSX.Element => {
                     <CollapsibleTrigger className="w-full">
                       <SidebarMenuButton
                         asChild
-                        className="transition-transform hover:text-white hover:bg-customMenuItemHoverBg active:bg-customMenuItemHoverBg active:text-white active:scale-95"
+                        className={`${location.pathname.includes("vps") ? "bg-customMenuItemHoverBg" : ""} transition-transform hover:text-white hover:bg-customMenuItemHoverBg active:bg-customMenuItemHoverBg active:text-white active:scale-95`}
                       >
                         <div className="flex justify-between">
                           <IconServers />
@@ -123,11 +123,7 @@ export const AppSideBarContent: FC = (): JSX.Element => {
                         <SidebarMenuSubItem key="vps" className="ml-6">
                           <SidebarMenuSubButton
                             asChild
-                            isActive={
-                              activeItem === "vps" ||
-                              location.pathname.includes("vps")
-                            }
-                            className="transition-transform active:scale-95"
+                            className="transition-transform active:scale-95 hover:text-white hover:bg-customMenuItemHoverBg active:bg-customMenuItemHoverBg active:text-white"
                             onClick={() => handleMenuItemClick("vps")}
                           >
                             <NavLink to="/server-management/servers/vps">
