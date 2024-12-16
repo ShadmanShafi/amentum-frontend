@@ -20,6 +20,7 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        customActiveBorder: "hsla(40, 89%, 75%)",
         customContainerBg: "#e9ecef",
         customSidebarBg: "#082844",
         customTextColor: "#232D42",

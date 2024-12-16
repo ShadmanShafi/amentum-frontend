@@ -3,6 +3,9 @@ import { NavLink, useLocation } from "react-router-dom";
 import { ChevronRight, Menu } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { ROUTES } from "@/constants/routePaths";
+import { SIDEBAR_STATE } from "@/constants/menuItems";
+
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -13,13 +16,12 @@ import {
   useSidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 
 import {
@@ -33,7 +35,7 @@ import {
 export const AppSideBarContent: FC = (): JSX.Element => {
   const { t } = useTranslation();
   const location = useLocation();
-  const { isMobile, toggleSidebar } = useSidebar();
+  const { state, isMobile, toggleSidebar } = useSidebar();
 
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
@@ -44,146 +46,150 @@ export const AppSideBarContent: FC = (): JSX.Element => {
 
   return (
     <SidebarContent className="gap-0 mt-6 overflow-x-hidden">
-      <SidebarMenu>
-        <SidebarGroup>
-          <SidebarMenuItem key="home">
+      <SidebarGroup>
+        <SidebarMenu>
+          {/* Home */}
+          <SidebarMenuItem key={ROUTES.HOME}>
             <SidebarMenuButton
               disabled
               asChild
-              isActive={activeItem === "home"}
-              onClick={() => handleMenuItemClick("home")}
+              isActive={activeItem === ROUTES.HOME}
+              onClick={() => handleMenuItemClick(ROUTES.HOME)}
             >
               <Button disabled variant="ghost" className="justify-start w-full">
                 <IconHome />
-                <span>{t("layout.sidebar.home")}</span>
+                <span className="font-semibold">
+                  {t("layout.sidebar.home")}
+                </span>
               </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>
-        </SidebarGroup>
-      </SidebarMenu>
-      {/* Server Management */}
-      <SidebarMenu>
-        <Collapsible
-          key="server-management"
-          className="group/collapsible"
-          title="Serversteuerung"
-          defaultOpen={location.pathname.includes("vps")}
-        >
-          <SidebarGroup>
-            <SidebarGroupLabel
-              asChild
-              className="text-sm group/label text-sidebar-foreground hover:text-sidebar-accent-foreground"
-            >
-              <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverBg">
-                <IconServerManagement />
-                <span className="me-2"></span>
-                {t("layout.sidebar.serverManagement")}
-                <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+
+          {/* Server Management */}
+          <Collapsible
+            key={ROUTES.SERVER_MANAGEMENT}
+            className="group/collapsible "
+            defaultOpen={location.pathname.includes(ROUTES.VPS)}
+            onClick={
+              state === SIDEBAR_STATE.COLLAPSED ? toggleSidebar : undefined
+            }
+          >
+            <SidebarGroup className="p-0 ">
+              <CollapsibleTrigger>
+                <SidebarMenuButton
+                  asChild
+                  className={`transition-transform ${location.pathname.includes("vps") && state === SIDEBAR_STATE.EXPANDED ? "border-l-[6px] border-customActiveBorder " : ""} hover:text-white hover:bg-customMenuItemHoverBg active:bg-customMenuItemHoverBg active:text-white active:scale-95`}
+                  isActive={location.pathname.includes("vps")}
+                >
+                  <div className="flex">
+                    <IconServerManagement />
+                    <span className="font-semibold">
+                      {t("layout.sidebar.serverManagement")}
+                    </span>
+
+                    <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                  </div>
+                </SidebarMenuButton>
               </CollapsibleTrigger>
-            </SidebarGroupLabel>
 
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <SidebarMenuSub className="border-0">
-                  {/* Servers */}
-                  <SidebarMenuItem key="servers">
-                    <Collapsible
-                      key="servers-collapsible"
-                      className="group/collapsible me-2"
-                      title="Servers"
-                      defaultOpen={location.pathname.includes("vps")}
-                    >
-                      <SidebarGroup className="gap-2 ms-4">
-                        <SidebarGroupLabel
-                          asChild
-                          className="text-sm group/label text-sidebar-foreground hover:text-sidebar-accent-foreground"
-                        >
-                          <CollapsibleTrigger className="hover:text-white hover:bg-customMenuItemHoverBg">
-                            <IconServers />
-                            <span className="me-2"></span>
+              {/* Servers */}
+              <CollapsibleContent>
+                <SidebarMenuSub className="pt-2 border-0 ps-6">
+                  <Collapsible
+                    key="servers-collapsible"
+                    className="group/collapsible"
+                    title="Servers"
+                    defaultOpen={location.pathname.includes("vps")}
+                  >
+                    <CollapsibleTrigger className="w-full">
+                      <SidebarMenuButton
+                        asChild
+                        className="transition-transform hover:text-white hover:bg-customMenuItemHoverBg active:bg-customMenuItemHoverBg active:text-white active:scale-95"
+                      >
+                        <div className="flex justify-between">
+                          <IconServers />
+                          <span className="font-semibold me-2">
                             {t("layout.sidebar.servers")}
-                            <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-                          </CollapsibleTrigger>
-                        </SidebarGroupLabel>
+                          </span>
 
-                        <CollapsibleContent>
-                          <SidebarGroupContent>
-                            <SidebarMenuSub className="border-0">
-                              {/* VPS */}
-                              <SidebarMenuSubItem key="vps" className="ml-6">
-                                <SidebarMenuButton
-                                  asChild
-                                  isActive={
-                                    activeItem === "vps" ||
-                                    location.pathname.includes("vps")
-                                  }
-                                  onClick={() => handleMenuItemClick("vps")}
-                                >
-                                  <NavLink to="/server-management/servers/vps">
-                                    <span>{t("layout.sidebar.vps")}</span>
-                                  </NavLink>
-                                </SidebarMenuButton>
-                              </SidebarMenuSubItem>
+                          <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                        </div>
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
 
-                              {/* VDS */}
-                              <SidebarMenuSubItem key="vds" className="ml-6">
-                                <SidebarMenuButton
-                                  disabled
-                                  asChild
-                                  isActive={activeItem === "vds"}
-                                  onClick={() => handleMenuItemClick("vds")}
-                                >
-                                  <Button
-                                    variant="ghost"
-                                    disabled
-                                    className="justify-start w-full"
-                                  >
-                                    <span>{t("layout.sidebar.vds")}</span>
-                                  </Button>
-                                </SidebarMenuButton>
-                              </SidebarMenuSubItem>
-                            </SidebarMenuSub>
-                          </SidebarGroupContent>
-                        </CollapsibleContent>
-                      </SidebarGroup>
-                    </Collapsible>
-                  </SidebarMenuItem>
+                    {/* VPS */}
+                    <CollapsibleContent>
+                      <SidebarMenuSub className="pt-2 border-0 ps-2">
+                        <SidebarMenuSubItem key="vps" className="ml-6">
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={
+                              activeItem === "vps" ||
+                              location.pathname.includes("vps")
+                            }
+                            className="transition-transform active:scale-95"
+                            onClick={() => handleMenuItemClick("vps")}
+                          >
+                            <NavLink to="/server-management/servers/vps">
+                              <span className="font-semibold">
+                                {t("layout.sidebar.vps")}
+                              </span>
+                            </NavLink>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+
+                        {/* VDS */}
+                        <SidebarMenuSubItem key="vds" className="ml-6">
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={activeItem === "vds"}
+                            onClick={() => handleMenuItemClick("vds")}
+                          >
+                            <Button
+                              variant="ghost"
+                              disabled
+                              className="justify-start w-full"
+                            >
+                              <span className="font-semibold">
+                                {t("layout.sidebar.vds")}
+                              </span>
+                            </Button>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </Collapsible>
                 </SidebarMenuSub>
-              </SidebarGroupContent>
-            </CollapsibleContent>
-          </SidebarGroup>
-        </Collapsible>
-      </SidebarMenu>
-      {/* Account */}
-      <SidebarMenu>
-        <SidebarGroup>
-          <SidebarMenuItem key="account">
-            <SidebarMenuButton asChild>
-              <Button variant="ghost" disabled className="justify-start w-full">
+              </CollapsibleContent>
+            </SidebarGroup>
+          </Collapsible>
+
+          {/* Account */}
+          <SidebarMenuItem key={ROUTES.ACCOUNT}>
+            <SidebarMenuButton asChild disabled>
+              <Button disabled variant="ghost" className="justify-start w-full">
                 <IconAccount />
-                <span>{t("layout.sidebar.account")}</span>
+                <span className="font-semibold">
+                  {t("layout.sidebar.account")}
+                </span>
               </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>
-        </SidebarGroup>
-      </SidebarMenu>
-      {/* Support */}
-      <SidebarMenu>
-        <SidebarGroup>
-          <SidebarMenuItem key="support">
-            <SidebarMenuButton asChild>
-              <Button variant="ghost" disabled className="justify-start w-full">
+
+          {/* Support */}
+          <SidebarMenuItem key={ROUTES.SUPPORT}>
+            <SidebarMenuButton disabled asChild>
+              <Button disabled variant="ghost" className="justify-start w-full">
                 <IconSupport />
-                <span>{t("layout.sidebar.support")}</span>
+                <span className="font-semibold">
+                  {t("layout.sidebar.support")}
+                </span>
               </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>
-        </SidebarGroup>
-      </SidebarMenu>
-      {/* Menu Toggle */}
-      <SidebarMenu className="">
-        <SidebarGroup className="">
-          <SidebarMenuItem key="toggle-sidebar" className="">
+
+          {/* Menu Toggle */}
+          <SidebarMenuItem key="toggle-sidebar">
             <SidebarMenuButton
               asChild
               className="hover:bg-customMenuItemHoverBg"
@@ -197,8 +203,8 @@ export const AppSideBarContent: FC = (): JSX.Element => {
               </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>
-        </SidebarGroup>
-      </SidebarMenu>
+        </SidebarMenu>
+      </SidebarGroup>
     </SidebarContent>
   );
 };
