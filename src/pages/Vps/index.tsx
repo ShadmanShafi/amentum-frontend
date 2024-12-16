@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "motion/react";
-import {
-  ArrowDownAz,
-  ArrowDownZA,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import { Table as ReactTable } from "@tanstack/react-table";
+
+import { ArrowDownAz, ArrowDownZA } from "lucide-react";
 
 import {
   Table,
@@ -17,7 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 import {
@@ -30,152 +23,7 @@ import {
 } from "@tanstack/react-table";
 
 import { columns, rows } from "./constants";
-
-const Pagination = ({ table }: { table: ReactTable<(typeof rows)[0]> }) => {
-  const pageCount = table.getPageCount();
-  const currentPage = table.getState().pagination.pageIndex + 1;
-  const pageNumbers = [];
-
-  for (let i = 1; i <= pageCount; i++) {
-    pageNumbers.push(i);
-  }
-
-  const renderPageNumbers = () => {
-    const maxPagesToShow = 5;
-    const pages = [];
-
-    if (pageCount <= maxPagesToShow) {
-      for (let i = 1; i <= pageCount; i++) {
-        pages.push(
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Button
-              variant={currentPage === i ? "default" : "outline"}
-              className={
-                currentPage === i
-                  ? "text-white bg-customSidebarBg hover:bg-customSidebarBg"
-                  : ""
-              }
-              size="sm"
-              onClick={() => table.setPageIndex(i - 1)}
-            >
-              {i}
-            </Button>
-          </motion.div>
-        );
-      }
-    } else {
-      pages.push(
-        <motion.div
-          key={1}
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Button
-            variant={currentPage === 1 ? "default" : "outline"}
-            className={
-              currentPage === 1
-                ? "text-white bg-customSidebarBg hover:bg-customSidebarBg"
-                : ""
-            }
-            size="sm"
-            onClick={() => table.setPageIndex(0)}
-          >
-            1
-          </Button>
-        </motion.div>
-      );
-
-      if (currentPage > 3) {
-        pages.push(<span key="ellipsis1">...</span>);
-      }
-
-      const startPage = Math.max(2, currentPage - 1);
-      const endPage = Math.min(pageCount - 1, currentPage + 1);
-
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Button
-              variant={currentPage === i ? "default" : "outline"}
-              className={
-                currentPage === i
-                  ? "text-white bg-customSidebarBg hover:bg-customSidebarBg"
-                  : ""
-              }
-              size="sm"
-              onClick={() => table.setPageIndex(i - 1)}
-            >
-              {i}
-            </Button>
-          </motion.div>
-        );
-      }
-
-      if (currentPage < pageCount - 2) {
-        pages.push(<span key="ellipsis2">...</span>);
-      }
-
-      pages.push(
-        <motion.div
-          key={pageCount}
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Button
-            variant={currentPage === pageCount ? "default" : "outline"}
-            className={
-              currentPage === pageCount
-                ? "text-white bg-customSidebarBg hover:bg-customSidebarBg"
-                : ""
-            }
-            size="sm"
-            onClick={() => table.setPageIndex(pageCount - 1)}
-          >
-            {pageCount}
-          </Button>
-        </motion.div>
-      );
-    }
-
-    return pages;
-  };
-
-  return (
-    <div className="flex items-center space-x-2">
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => table.previousPage()}
-        disabled={!table.getCanPreviousPage()}
-      >
-        <ChevronLeft />
-      </Button>
-
-      {renderPageNumbers()}
-
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => table.nextPage()}
-        disabled={!table.getCanNextPage()}
-      >
-        <ChevronRight />
-      </Button>
-    </div>
-  );
-};
+import { Pagination } from "./components/Pagination";
 
 const Vps = () => {
   const navigate = useNavigate();
@@ -259,7 +107,7 @@ const Vps = () => {
 
       <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 space-y-2 sm:flex-row sm:space-y-0">
         <div className="text-sm text-customTextColorSecondary">
-          Total {table.getCoreRowModel().rows.length} rows
+          {`Showing ${table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to ${Math.min((table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize, table.getCoreRowModel().rows.length)}, out of ${table.getCoreRowModel().rows.length} entires`}
         </div>
 
         <Pagination table={table} />

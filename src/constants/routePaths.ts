@@ -3,6 +3,8 @@ export const ROUTES = {
   LOGIN: "/login",
   REGISTRATION: "/registration",
   RESET_PASSWORD: "/reset-password",
+  SERVER_MANAGEMENT: "/server-management",
+  SERVERS: "/server-management/servers",
   VPS: "/server-management/servers/vps",
   VDS: "/server-management/servers/vds",
   VPS_DETAILS: "/server-management/servers/vps/:id",
