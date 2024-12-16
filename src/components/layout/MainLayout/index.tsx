@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Navigate } from "react-router-dom";
 
-import { AppSidebar } from "@/components/layout/MainLayout/AppSidebar";
+import { AppSidebar } from "@/components/layout/MainLayout/AppSideBar";
 import { Container } from "@/components/layout/MainLayout/Container";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Header } from "@/components/layout/MainLayout/Header";

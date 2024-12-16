@@ -1,5 +1,7 @@
 import { RouteObject } from "react-router-dom";
 
+import { ROUTES } from "@/constants/routePaths";
+
 import { MainLayout } from "../components/layout";
 import { mainMenuList } from "./mainMenuList";
 
@@ -10,24 +12,24 @@ import NotFound404 from "@/components/shared/404";
 
 export const routeList: RouteObject[] = [
   {
-    path: "/",
+    path: ROUTES.HOME,
     element: <MainLayout />,
     children: mainMenuList,
   },
   {
-    path: "/login",
+    path: ROUTES.LOGIN,
     element: <Login />,
   },
   {
-    path: "/registration",
+    path: ROUTES.REGISTRATION,
     element: <SignUp />,
   },
   {
-    path: "/reset-password",
+    path: ROUTES.RESET_PASSWORD,
     element: <ResetPassword />,
   },
   {
-    path: "*",
+    path: ROUTES.NOT_FOUND,
     element: <NotFound404 />,
   },
 ];
