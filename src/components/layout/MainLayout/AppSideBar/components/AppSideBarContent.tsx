@@ -78,7 +78,7 @@ export const AppSideBarContent: FC = (): JSX.Element => {
               <CollapsibleTrigger>
                 <SidebarMenuButton
                   asChild
-                  className={`transition-transform ${location.pathname.includes("vps") && state === SIDEBAR_STATE.EXPANDED ? "border-l-[6px] border-customActiveBorder " : ""} hover:text-white hover:bg-customMenuItemHoverBg active:bg-customMenuItemHoverBg active:text-white active:scale-95`}
+                  className={`transition-transform ${location.pathname.includes("vps") && state === SIDEBAR_STATE.EXPANDED ? "border-l-[6px] border-customActiveBorder" : ""} hover:text-white hover:bg-customMenuItemHoverBg active:bg-customMenuItemHoverBg active:text-white active:scale-95`}
                   isActive={location.pathname.includes("vps")}
                 >
                   <div className="flex">

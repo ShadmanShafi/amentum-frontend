@@ -1,3 +1,8 @@
+import { useParams } from "react-router-dom";
+
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import {
   IconServerDetails,
   IconHardReset,
@@ -9,9 +14,6 @@ import {
   IconStatusEnabledActive,
   IconStatusWarningInactive,
 } from "@/assets/Icons";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useParams } from "react-router-dom";
 
 const VpsDetails = () => {
   const { id } = useParams();
@@ -36,9 +38,20 @@ const VpsDetails = () => {
         </div>
 
         <div className="flex flex-wrap gap-3 py-2">
-          <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
-            <IconHardReset />
+          <div className="border-[0.8px] border-customButtonBorderGray hover:scale-105 active:scale-100 active:border-customButtonBorderGrayDarker transition-all bg-customButtonBgGray">
+            <Button
+              variant="link"
+              className="justify-between gap-2 rounded-none hover:no-underline hover:bg-white flex flex-col transition-all duration-150 active:border-b-[6px] active:border-customActiveBorder relative  max-h-20  overflow-hidden cursor-pointer max-w-30 w-5/6 h-5/6"
+            >
+              <div className="flex items-center justify-center w-full h-full">
+                <IconHardReset />
+              </div>
+              <h6 className="text-xs font-semibold text-customTextColor">
+                Hard Reset
+              </h6>
+            </Button>
           </div>
+
           <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
             <IconNewInstallation />
           </div>
