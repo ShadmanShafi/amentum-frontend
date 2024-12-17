@@ -27,7 +27,7 @@ const VpsDetails = () => {
 
         <div className="flex flex-col gap-3">
           <h1 className="text-4xl font-bold tracking-tight scroll-m-20 text-customTextColor">
-            {id}
+            Server - {id}
           </h1>
 
           <div className="flex gap-2">
@@ -38,18 +38,8 @@ const VpsDetails = () => {
         </div>
 
         <div className="flex flex-wrap gap-3 py-2">
-          <div className="border-[0.8px] border-customButtonBorderGray hover:scale-105 active:scale-100 active:border-customButtonBorderGrayDarker transition-all bg-customButtonBgGray">
-            <Button
-              variant="link"
-              className="justify-between gap-2 rounded-none hover:no-underline hover:bg-white flex flex-col transition-all duration-150 active:border-b-[6px] active:border-customActiveBorder relative  max-h-20  overflow-hidden cursor-pointer max-w-30 w-5/6 h-5/6"
-            >
-              <div className="flex items-center justify-center w-full h-full">
-                <IconHardReset />
-              </div>
-              <h6 className="text-xs font-semibold text-customTextColor">
-                Hard Reset
-              </h6>
-            </Button>
+          <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
+            <IconHardReset />
           </div>
 
           <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
@@ -70,75 +60,85 @@ const VpsDetails = () => {
       <div className="flex w-full py-12 justify-evenly px-14 bg-customContainerBg">
         <div className="flex flex-col gap-2">
           <h6>
-            <span className="font-bold text-customTextColor">ID: </span>
-            11912
+            <span className="font-semibold text-customTextColor">ID: </span>
+            <span className="text-customTextColorSecondary">11912</span>
           </h6>
 
           <h6>
             <span className="font-semibold text-customTextColor">IP: </span>
-            207.108.244.12
+            <span className="text-customTextColorSecondary">
+              207.108.244.12
+            </span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">
               Servername:{" "}
             </span>
-            NEUE-SERVER-01
+            <span className="text-customTextColorSecondary">
+              NEUE-SERVER-01
+            </span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">OS: </span>
-            Linux
+            <span className="text-customTextColorSecondary">Linux</span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">
               MAC-Address:{" "}
             </span>
-            00:50:56:55:4a:4b
+            <span className="text-customTextColorSecondary">
+              00:50:56:55:4a:4b
+            </span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">
               Letzte Bootzeit:{" "}
             </span>
-            21.09.2024 17:32 Uhr0
+            <span className="text-customTextColorSecondary">
+              21.09.2024 17:32 Uhr0
+            </span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">
               Termination Date:{" "}
             </span>
-            -
+            <span className="text-customTextColorSecondary">-</span>
           </h6>
         </div>
 
         <div className="flex flex-col gap-2">
           <h6>
             <span className="font-semibold text-customTextColor">Region: </span>
-            EU
+            <span className="text-customTextColorSecondary">EU</span>
           </h6>
 
           <h6>
             <span className="font-semibold text-customTextColor">Plan: </span>
-            Description: VPS 4 SSD (ohne Setup) Disk Space: 1.95 TB
+            <span className="text-customTextColorSecondary">
+              Description: VPS 4 SSD (ohne Setup) Disk Space: 1.95 TB
+            </span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">
               Default User:{" "}
             </span>
-            root
+            <span className="text-customTextColorSecondary">root</span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">VNC: </span>
-            Disabled
+            <span className="text-customTextColorSecondary">Disabled</span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">
               Monthly Price:{" "}
             </span>
-            0.00 Euro
+            <span className="text-customTextColorSecondary">0.00 Euro</span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">
               Contract Period:{" "}
             </span>
-            0.00 Euro
+            <span className="text-customTextColorSecondary">0.00 Euro</span>
           </h6>
         </div>
 
