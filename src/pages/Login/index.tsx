@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useLoginMutation } from "@/store/apis/authApis";
 
 import {
   Form,
@@ -29,6 +31,7 @@ const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const [login, { isLoading }] = useLoginMutation();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -42,13 +45,20 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("submitted data: ", data);
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      const response = await login(data).unwrap();
+      console.log("Login successful: ", response);
 
-    // remove this line when the backend is ready
-    setLocalStorage("accessToken", "token");
+      navigate("/server-management/servers/vps");
+    } catch (error: Error | any) {
+      console.error("Login failed: ", error);
+      const errorMessage = error.data?.message || error.message || "";
+      toast.error(`Login failed ${errorMessage}`);
 
-    navigate("/server-management/servers/vps");
+      // setLocalStorage("accessToken", "token");
+      // navigate("/server-management/servers/vps");
+    }
   };
 
   return (
@@ -126,7 +136,12 @@ const Login = () => {
                 {t("login.forgotPassword")}
               </Button>
 
-              <Button className="px-10" type="submit">
+              <Button
+                className="px-10"
+                type="submit"
+                disabled={isLoading}
+                // loading={true}
+              >
                 {t("login.signIn")}
               </Button>
 

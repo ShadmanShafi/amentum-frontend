@@ -1,8 +1,8 @@
-export const IconPasswordReset = () => {
+export const IconPasswordReset = ({ scale = 1 }: { scale?: number }) => {
   return (
     <svg
-      width="119"
-      height="81"
+      width={scale * 119}
+      height={scale * 81}
       viewBox="0 0 82 60"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
