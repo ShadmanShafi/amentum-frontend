@@ -8,12 +8,12 @@ import {
 
 export const vpsApi = baseApiWithAuthAndRefresh.injectEndpoints({
   endpoints: (builder) => ({
-    getVmsList: builder.query<VpsListResponseType[], void>({
+    getVmsList: builder.query<VpsListResponseType, void>({
       query: () => "/vps/nodes",
     }),
 
     getVmById: builder.query<VmByIdResponseType, VmByIdRequestType>({
-      query: ({ nodeId, vmsId }) => `/vps/nodes/${nodeId}/vms/${vmsId}`,
+      query: ({ nodeId, vmId }) => `/vps/nodes/${nodeId}/vms/${vmId}`,
     }),
   }),
 });

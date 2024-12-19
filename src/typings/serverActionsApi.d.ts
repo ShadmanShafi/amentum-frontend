@@ -1,6 +1,6 @@
 export interface HardResetRequestType {
   nodeId: string;
-  vmsId: string;
+  vmId: string;
 }
 
 export interface HardResetResponseType {
@@ -9,7 +9,7 @@ export interface HardResetResponseType {
 
 export interface NewInstallationRequestType {
   nodeId: string;
-  vmsId: string;
+  vmId: string;
   templateVmid: string;
   cloneName: string;
   cloudInitConfig: {
@@ -24,7 +24,7 @@ export interface NewInstallationResponseType {
 
 export interface RescueSystemRequestType {
   nodeId: string;
-  vmsId: string;
+  vmId: string;
 }
 
 export interface RescueSystemResponseType {
@@ -33,7 +33,7 @@ export interface RescueSystemResponseType {
 
 export interface ResetPasswordRequestType {
   nodeId: string;
-  vmsId: string;
+  vmId: string;
   user: string;
   newPassword: string;
 }
@@ -44,7 +44,7 @@ export interface ResetPasswordResponseType {
 
 export interface SoftResetRequestType {
   nodeId: string;
-  vmsId: string;
+  vmId: string;
 }
 
 export interface SoftResetResponseType {

@@ -16,8 +16,8 @@ import {
 export const serverActionApi = baseApiWithAuthAndRefresh.injectEndpoints({
   endpoints: (builder) => ({
     hardReset: builder.mutation<HardResetResponseType, HardResetRequestType>({
-      query: ({ nodeId, vmsId }) => ({
-        url: `/vps/nodes/$${nodeId}/vms/${vmsId}/hard_reset`,
+      query: ({ nodeId, vmId }) => ({
+        url: `/vps/nodes/$${nodeId}/vms/${vmId}/hard_reset`,
         method: "POST",
       }),
     }),
@@ -26,8 +26,8 @@ export const serverActionApi = baseApiWithAuthAndRefresh.injectEndpoints({
       NewInstallationResponseType,
       NewInstallationRequestType
     >({
-      query: ({ nodeId, vmsId, ...rest }) => ({
-        url: `/vps/nodes/${nodeId}/vms/${vmsId}/reinstall`,
+      query: ({ nodeId, vmId, ...rest }) => ({
+        url: `/vps/nodes/${nodeId}/vms/${vmId}/reinstall`,
         method: "POST",
         body: rest,
       }),
@@ -37,8 +37,8 @@ export const serverActionApi = baseApiWithAuthAndRefresh.injectEndpoints({
       RescueSystemResponseType,
       RescueSystemRequestType
     >({
-      query: ({ nodeId, vmsId }) => ({
-        url: `/vps/nodes/${nodeId}/vms/${vmsId}/rescue`,
+      query: ({ nodeId, vmId }) => ({
+        url: `/vps/nodes/${nodeId}/vms/${vmId}/rescue`,
         method: "POST",
       }),
     }),
@@ -47,16 +47,16 @@ export const serverActionApi = baseApiWithAuthAndRefresh.injectEndpoints({
       ResetPasswordResponseType,
       ResetPasswordRequestType
     >({
-      query: ({ nodeId, vmsId, ...rest }) => ({
-        url: `/vps/nodes/${nodeId}/vms/${vmsId}/reset_password`,
+      query: ({ nodeId, vmId, ...rest }) => ({
+        url: `/vps/nodes/${nodeId}/vms/${vmId}/reset_password`,
         method: "POST",
         body: rest,
       }),
     }),
 
     softReset: builder.mutation<SoftResetResponseType, SoftResetRequestType>({
-      query: ({ nodeId, vmsId }) => ({
-        url: `/vps/nodes/${nodeId}/vms/${vmsId}/soft_reset`,
+      query: ({ nodeId, vmId }) => ({
+        url: `/vps/nodes/${nodeId}/vms/${vmId}/soft_reset`,
         method: "POST",
       }),
     }),

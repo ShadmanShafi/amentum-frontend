@@ -4,9 +4,11 @@ import { useTranslation } from "react-i18next";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useRegisterMutation } from "@/store/apis/authApis";
 
 import {
   Form,
@@ -26,11 +28,13 @@ import { AmentumLogo } from "@/assets/AmentumLogo";
 import { createFormSchema } from "./validation";
 
 const SignUp = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const { t } = useTranslation();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [register, { isLoading }] = useRegisterMutation();
 
   const formSchema = createFormSchema(t);
 
@@ -47,10 +51,18 @@ const SignUp = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("submitted data: ", data);
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      const response = await register(data).unwrap();
+      console.log("Login successful: ", response);
 
-    navigate("/login");
+      navigate("/login");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Login failed: ", error);
+      const errorMessage = error.data?.message || error.message || "";
+      toast.error(`Login failed ${errorMessage}`);
+    }
   };
 
   return (
@@ -126,7 +138,7 @@ const SignUp = () => {
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel className="text-customTextColorSecondary">
-                      {t("registration.phoneNumber")}
+                      {t("registration.phoneNo")}
                     </FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
@@ -230,7 +242,12 @@ const SignUp = () => {
             />
 
             <div className="flex flex-col items-center justify-center gap-4">
-              <Button className="px-10" type="submit">
+              <Button
+                className="px-10"
+                type="submit"
+                disabled={isLoading}
+                loading={isLoading}
+              >
                 {t("registration.signUp")}
               </Button>
 

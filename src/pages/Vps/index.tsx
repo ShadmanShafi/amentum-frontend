@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 
 import { ArrowDownAz, ArrowDownZA } from "lucide-react";
 
@@ -11,6 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 
 import {
@@ -22,20 +24,30 @@ import {
   SortingState,
 } from "@tanstack/react-table";
 
-import { columns, rows } from "./constants";
+import { columns } from "./constants";
 import { Pagination } from "./components/Pagination";
+import { useGetVmsListQuery } from "@/store/apis/vpsApis";
+
+interface RowIds {
+  nodeId: string;
+  vmId: number;
+}
 
 const Vps = () => {
-  const navigate = useNavigate();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const navigate = useNavigate();
 
-  const handleRowClick = (id: string) => {
-    navigate(`/server-management/servers/vps/${id}`);
+  const { isFetching, data: vmsList } = useGetVmsListQuery();
+
+  console.log("vmsList", vmsList);
+
+  const handleRowClick = ({ nodeId, vmId }: RowIds) => {
+    navigate(`/server-management/servers/vps/${nodeId}/${vmId}`);
   };
 
   const table = useReactTable({
-    data: rows,
+    data: vmsList ? vmsList.servers : [],
     columns: columns,
     state: {
       sorting,
@@ -56,54 +68,84 @@ const Vps = () => {
 
       <Separator className="mt-6 mb-4" />
 
-      <Table className="border">
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead
-                  key={header.id}
-                  onClick={header.column.getToggleSortingHandler()}
-                  className="px-2 py-1 text-sm font-semibold border cursor-pointer select-none sm:text-base sm:px-5 sm:py-2 text-customTableHeaderColor bg-customTableHeaderBg"
-                >
-                  <div className="flex items-center">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    {header.column.getIsSorted() &&
-                      {
-                        asc: <ArrowDownAz className="w-4 h-4 ml-2" />,
-                        desc: <ArrowDownZA className="w-4 h-4 ml-2" />,
-                      }[header.column.getIsSorted() as "asc" | "desc"]}
-                  </div>
-                </TableHead>
+      {!isFetching ? (
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Table className="border">
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      onClick={header.column.getToggleSortingHandler()}
+                      className="px-2 py-1 text-sm font-semibold border cursor-pointer select-none sm:text-base sm:px-5 sm:py-2 text-customTableHeaderColor bg-customTableHeaderBg"
+                    >
+                      <div className="flex items-center">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                        {header.column.getIsSorted() &&
+                          {
+                            asc: <ArrowDownAz className="w-4 h-4 ml-2" />,
+                            desc: <ArrowDownZA className="w-4 h-4 ml-2" />,
+                          }[header.column.getIsSorted() as "asc" | "desc"]}
+                      </div>
+                    </TableHead>
+                  ))}
+                </TableRow>
               ))}
-            </TableRow>
-          ))}
-        </TableHeader>
+            </TableHeader>
 
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow
-              key={row.id}
-              onClick={() => handleRowClick(row.original.key)}
-              className="text-xs cursor-pointer hover:bg-customTableRowHoverBg text-customTextColor"
-            >
-              {row.getVisibleCells().map((cell) => (
-                <TableCell
-                  key={cell.id}
-                  className="px-2 py-1 border sm:px-5 sm:py-4"
+            <TableBody>
+              {table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  onClick={() =>
+                    handleRowClick({
+                      nodeId: row.original.node,
+                      vmId: row.original.id,
+                    })
+                  }
+                  className="text-xs cursor-pointer hover:bg-customTableRowHoverBg text-customTextColor"
                 >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className="px-2 py-1 border sm:px-5 sm:py-4"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
               ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+            </TableBody>
+          </Table>
+        </motion.div>
+      ) : (
+        <div className="space-y-4">
+          <div className="flex space-x-2">
+            <Skeleton className="w-1/4 h-8 bg-slate-300" />
+            <Skeleton className="w-1/4 h-8 bg-slate-300" />
+            <Skeleton className="w-1/4 h-8 bg-slate-300" />
+            <Skeleton className="w-1/4 h-8 bg-slate-300" />
+          </div>
+          <Skeleton className="w-full h-8 bg-slate-300" />
+          <Skeleton className="w-full h-8 bg-slate-300" />
+          <Skeleton className="w-full h-8 bg-slate-300" />
+          <Skeleton className="w-full h-8 bg-slate-300" />
+          <Skeleton className="w-full h-8 bg-slate-300" />
+        </div>
+      )}
 
       <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 space-y-2 sm:flex-row sm:space-y-0">
         <div className="text-sm text-customTextColorSecondary">

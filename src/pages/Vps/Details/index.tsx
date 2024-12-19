@@ -1,12 +1,19 @@
 import { useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useGetVmByIdQuery } from "@/store/apis/vpsApis";
+import {
+  useHardResetMutation,
+  useSoftResetMutation,
+} from "@/store/apis/serverActionApis";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
@@ -36,15 +43,34 @@ import {
   IconStatusDisabledInactive,
   IconStatusEnabledActive,
   IconStatusWarningInactive,
+  IconStatusDisabledActive,
+  IconStatusWarningActive,
+  IconStatusEnabledInactive,
 } from "@/assets/Icons";
 
 import { createPasswordResetFormSchema } from "./validation";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const VpsDetails = () => {
-  const { id } = useParams();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogOpen2, setIsDialogOpen2] = useState(false);
+  const { nodeId, vmId } = useParams();
   const isMobile = useIsMobile();
 
-  console.log("params: ", id);
+  const {
+    isFetching,
+    data: vmDetails,
+    refetch,
+  } = useGetVmByIdQuery(
+    { nodeId: nodeId!, vmId: vmId! },
+    {
+      skip: !nodeId || !vmId,
+    }
+  );
+
+  const [hardReset, { isLoading: isHardResetLoading }] = useHardResetMutation();
+  const [softReset, { isLoading: isSoftResetLoading }] = useSoftResetMutation();
 
   const formSchema = createPasswordResetFormSchema();
 
@@ -56,6 +82,48 @@ const VpsDetails = () => {
     },
   });
 
+  const handleHardReset = async () => {
+    setIsDialogOpen(true);
+
+    try {
+      const response = await hardReset({
+        nodeId: nodeId!,
+        vmId: vmId!,
+      }).unwrap();
+      toast.info(`${response?.message}`);
+
+      refetch();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const errorMessage = error.data?.message || error.message || "";
+      toast.error(`Hard Reset failed ${errorMessage}`);
+    } finally {
+      setIsDialogOpen(false);
+    }
+  };
+
+  const handleSoftReset = async () => {
+    setIsDialogOpen2(true);
+
+    try {
+      const response = await softReset({
+        nodeId: nodeId!,
+        vmId: vmId!,
+      }).unwrap();
+      console.log("Soft Reset success: ", response);
+
+      toast.success(`Soft Reset success ${response?.message}`);
+
+      refetch();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const errorMessage = error.data?.message || error.message || "";
+      toast.error(`Soft Reset failed ${errorMessage}`);
+    } finally {
+      setIsDialogOpen2(false);
+    }
+  };
+
   const handleNewInstallationSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);
   };
@@ -66,21 +134,55 @@ const VpsDetails = () => {
         <IconServerDetails scale={isMobile ? 0.7 : 1} />
 
         <div className="flex flex-col gap-3">
-          <h1 className="text-xl font-bold tracking-tight text-center text-wrap sm:text-xl md:text-xl lg:text-2xl xl:text-2xl scroll-m-20 text-customTextColor pe-4">
-            ServerServer - {id}
-          </h1>
+          {!isFetching ? (
+            <h1 className="text-xl font-bold tracking-tight text-center text-wrap sm:text-xl md:text-xl lg:text-2xl xl:text-2xl scroll-m-20 text-customTextColor">
+              {vmDetails?.server?.name}
+            </h1>
+          ) : (
+            <Skeleton className="w-24 h-8 bg-slate-200" />
+          )}
 
-          <div className="flex justify-center gap-2">
-            <IconStatusDisabledInactive />
-            <IconStatusWarningInactive />
-            <IconStatusEnabledActive />
-          </div>
+          {!isFetching ? (
+            <div className="flex justify-center gap-2">
+              {vmDetails?.server?.status === "stopped" ? (
+                <IconStatusDisabledActive />
+              ) : (
+                <IconStatusDisabledInactive />
+              )}
+
+              {vmDetails?.server?.status === "paused" ? (
+                <IconStatusWarningActive />
+              ) : (
+                <IconStatusWarningInactive />
+              )}
+
+              {vmDetails?.server?.status === "running" ? (
+                <IconStatusEnabledActive />
+              ) : (
+                <IconStatusEnabledInactive />
+              )}
+            </div>
+          ) : (
+            <Skeleton className="w-12 h-6 bg-slate-200" />
+          )}
         </div>
 
         <div className="flex flex-wrap justify-center gap-2 py-2">
-          <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
-            <IconHardReset scale={isMobile ? 0.8 : 1} />
-          </div>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <div
+                className="transition-transform cursor-pointer hover:scale-105 active:scale-95"
+                onClick={handleHardReset}
+              >
+                <IconHardReset scale={isMobile ? 0.8 : 1} />
+              </div>
+            </DialogTrigger>
+            <DialogContent>
+              {isHardResetLoading ? (
+                <Loader2 className="w-10 h-10 text-center animate-spin" />
+              ) : null}
+            </DialogContent>
+          </Dialog>
 
           <Dialog>
             <DialogTrigger asChild>
@@ -147,54 +249,22 @@ const VpsDetails = () => {
           <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
             <IconPasswordReset scale={isMobile ? 0.8 : 1} />
           </div>
-          {/* <Popover>
-            <PopoverTrigger asChild>
-              <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
-                <IconPasswordReset scale={isMobile ? 0.8 : 1} />
-              </div>
-            </PopoverTrigger>
-            <PopoverContent>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col gap-4 p-4"
-              >
-                <input
-                  {...register("field1", {
-                    required: "This field is required",
-                  })}
-                  placeholder="Field 1"
-                  className="p-2 border"
-                />
-                {errors.field1 && (
-                  <span className="text-red-500">
-                    {errors.field1.message as string}
-                  </span>
-                )}
-                <input
-                  {...register("field2", {
-                    required: "This field is required",
-                  })}
-                  placeholder="Field 2"
-                  className="p-2 border"
-                />
-                {errors.field2 && (
-                  <span className="text-red-500">
-                    {errors.field2.message as string}
-                  </span>
-                )}
-                <button
-                  type="submit"
-                  className="p-2 text-white bg-blue-500 rounded"
-                >
-                  Submit
-                </button>
-              </form>
-            </PopoverContent>
-          </Popover> */}
 
-          <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
-            <IconSoftReset scale={isMobile ? 0.8 : 1} />
-          </div>
+          <Dialog open={isDialogOpen2} onOpenChange={setIsDialogOpen2}>
+            <DialogTrigger asChild>
+              <div
+                className="transition-transform cursor-pointer hover:scale-105 active:scale-95"
+                onClick={handleSoftReset}
+              >
+                <IconSoftReset scale={isMobile ? 0.8 : 1} />
+              </div>
+            </DialogTrigger>
+            <DialogContent>
+              {isSoftResetLoading ? (
+                <Loader2 className="w-10 h-10 text-center animate-spin" />
+              ) : null}
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -202,13 +272,15 @@ const VpsDetails = () => {
         <div className="flex flex-col w-full gap-2 md:w-1/2">
           <h6>
             <span className="font-semibold text-customTextColor">ID: </span>
-            <span className="text-customTextColorSecondary">11912</span>
+            <span className="text-customTextColorSecondary">
+              {vmDetails?.server?.id}
+            </span>
           </h6>
 
           <h6>
             <span className="font-semibold text-customTextColor">IP: </span>
             <span className="text-customTextColorSecondary">
-              207.108.244.12
+              {vmDetails?.server?.ipAddresses?.join(", ")}
             </span>
           </h6>
           <h6>
@@ -216,19 +288,21 @@ const VpsDetails = () => {
               Servername:{" "}
             </span>
             <span className="text-customTextColorSecondary">
-              NEUE-SERVER-01
+              {vmDetails?.server?.serverName}
             </span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">OS: </span>
-            <span className="text-customTextColorSecondary">Linux</span>
+            <span className="text-customTextColorSecondary">
+              {vmDetails?.server?.os}
+            </span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">
               MAC-Address:{" "}
             </span>
             <span className="text-customTextColorSecondary">
-              00:50:56:55:4a:4b
+              {vmDetails?.server?.mac}
             </span>
           </h6>
           <h6>
@@ -236,50 +310,62 @@ const VpsDetails = () => {
               Letzte Bootzeit:{" "}
             </span>
             <span className="text-customTextColorSecondary">
-              21.09.2024 17:32 Uhr0
+              {vmDetails?.server?.lastBootTime}
             </span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">
               Termination Date:{" "}
             </span>
-            <span className="text-customTextColorSecondary">-</span>
+            <span className="text-customTextColorSecondary">
+              {vmDetails?.server?.terminationTime}
+            </span>
           </h6>
         </div>
 
         <div className="flex flex-col w-full gap-2 md:w-1/2">
           <h6>
             <span className="font-semibold text-customTextColor">Region: </span>
-            <span className="text-customTextColorSecondary">EU</span>
+            <span className="text-customTextColorSecondary">
+              {vmDetails?.server?.region}
+            </span>
           </h6>
 
           <h6>
             <span className="font-semibold text-customTextColor">Plan: </span>
             <span className="text-customTextColorSecondary">
-              Description: VPS 4 SSD (ohne Setup) Disk Space: 1.95 TB
+              {vmDetails?.server?.plan}
             </span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">
               Default User:{" "}
             </span>
-            <span className="text-customTextColorSecondary">root</span>
+            <span className="text-customTextColorSecondary">
+              {vmDetails?.server?.defaultUser}
+            </span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">VNC: </span>
-            <span className="text-customTextColorSecondary">Disabled</span>
+            <span className="text-customTextColorSecondary">
+              {vmDetails?.server?.vnc}
+            </span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">
               Monthly Price:{" "}
             </span>
-            <span className="text-customTextColorSecondary">0.00 Euro</span>
+            <span className="text-customTextColorSecondary">
+              {vmDetails?.server?.monthlyPrice}
+            </span>
           </h6>
           <h6>
             <span className="font-semibold text-customTextColor">
               Contract Period:{" "}
             </span>
-            <span className="text-customTextColorSecondary">0.00 Euro</span>
+            <span className="text-customTextColorSecondary">
+              {vmDetails?.server?.contractPeriod}
+            </span>
           </h6>
 
           <div className="flex items-end justify-end mt-4">

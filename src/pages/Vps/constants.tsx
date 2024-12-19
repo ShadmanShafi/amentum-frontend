@@ -8,6 +8,8 @@ import {
   IconStatusEnabledActive,
 } from "@/assets/Icons";
 
+import { ServerType } from "@/typings/vpsApi";
+
 const generateDummyData = (count: number) => {
   const statuses = ["Running", "Pause", "Stopped"];
   const regions = ["EU", "US", "ASIA"];
@@ -17,26 +19,26 @@ const generateDummyData = (count: number) => {
   return Array.from({ length: count }, (_, index) => ({
     key: (index + 1).toString(),
     name: `Server-${index + 1}`,
-    displayName: `Display-${index + 1}`,
+    // displayName: `Display-${index + 1}`,
     productType: productTypes[index % productTypes.length],
     defaultUser: defaultUsers[index % defaultUsers.length],
     status: statuses[index % statuses.length],
-    ipAddress: `192.168.1.${index + 1}`,
+    ipAddresses: `192.168.1.${index + 1}`,
     region: regions[index % regions.length],
   }));
 };
 
 export const rows = generateDummyData(121);
 
-export const columns: ColumnDef<(typeof rows)[0]>[] = [
+export const columns: ColumnDef<ServerType>[] = [
   {
     accessorKey: "name",
     header: "Name",
   },
-  {
-    accessorKey: "displayName",
-    header: "Display Name",
-  },
+  // {
+  //   accessorKey: "displayName",
+  //   header: "Display Name",
+  // },
   {
     accessorKey: "productType",
     header: "Product Type",
@@ -53,19 +55,19 @@ export const columns: ColumnDef<(typeof rows)[0]>[] = [
 
       return (
         <div className="flex items-center space-x-2">
-          {row.original.status === "Stopped" ? (
+          {row.original.status === "stopped" ? (
             <IconStatusDisabledActive />
           ) : (
             <IconStatusDisabledInactive />
           )}
 
-          {row.original.status === "Pause" ? (
+          {row.original.status === "paused" ? (
             <IconStatusWarningActive />
           ) : (
             <IconStatusWarningInactive />
           )}
 
-          {row.original.status === "Running" ? (
+          {row.original.status === "running" ? (
             <IconStatusEnabledActive />
           ) : (
             <IconStatusEnabledInactive />
@@ -76,7 +78,7 @@ export const columns: ColumnDef<(typeof rows)[0]>[] = [
     },
   },
   {
-    accessorKey: "ipAddress",
+    accessorKey: "ipAddresses",
     header: "IP Address",
   },
   {

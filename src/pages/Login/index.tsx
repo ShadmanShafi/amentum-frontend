@@ -28,12 +28,13 @@ import { createFormSchema } from "./validation";
 // import { setLocalStorage } from "@/utils/storageUtils";
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const { t } = useTranslation();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const [login, { isLoading }] = useLoginMutation();
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [login, { isLoading }] = useLoginMutation();
 
   const formSchema = createFormSchema(t);
 
@@ -51,13 +52,11 @@ const Login = () => {
       console.log("Login successful: ", response);
 
       navigate("/server-management/servers/vps");
-    } catch (error: Error | any) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       console.error("Login failed: ", error);
       const errorMessage = error.data?.message || error.message || "";
       toast.error(`Login failed ${errorMessage}`);
-
-      // setLocalStorage("accessToken", "token");
-      // navigate("/server-management/servers/vps");
     }
   };
 
@@ -140,7 +139,7 @@ const Login = () => {
                 className="px-10"
                 type="submit"
                 disabled={isLoading}
-                // loading={true}
+                loading={isLoading}
               >
                 {t("login.signIn")}
               </Button>

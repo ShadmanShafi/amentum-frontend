@@ -5,10 +5,10 @@ import { Table as ReactTable } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { rows } from "../constants";
+import { ServerType } from "@/typings/vpsApi";
 
 interface PaginationProps {
-  table: ReactTable<(typeof rows)[0]>;
+  table: ReactTable<ServerType>;
 }
 
 export const Pagination = ({ table }: PaginationProps) => {
