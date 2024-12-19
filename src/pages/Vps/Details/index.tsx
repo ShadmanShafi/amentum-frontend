@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,12 +42,11 @@ import { createPasswordResetFormSchema } from "./validation";
 
 const VpsDetails = () => {
   const { id } = useParams();
-  const { t } = useTranslation();
   const isMobile = useIsMobile();
 
   console.log("params: ", id);
 
-  const formSchema = createPasswordResetFormSchema(t);
+  const formSchema = createPasswordResetFormSchema();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
