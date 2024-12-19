@@ -1,8 +1,8 @@
-export const IconServerDetails = () => {
+export const IconServerDetails = ({ scale = 1 }: { scale?: number }) => {
   return (
     <svg
-      width="136"
-      height="136"
+      width={scale * 136}
+      height={scale * 136}
       viewBox="0 0 136 136"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

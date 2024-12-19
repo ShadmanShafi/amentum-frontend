@@ -40,7 +40,7 @@ const SignUp = () => {
       firstName: "",
       lastName: "",
       email: "",
-      phoneNo: "",
+      phoneNumber: "",
       password: "",
       confirmPassword: "",
       giveConsent: false,
@@ -122,11 +122,11 @@ const SignUp = () => {
 
               <FormField
                 control={form.control}
-                name="phoneNo"
+                name="phoneNumber"
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel className="text-customTextColorSecondary">
-                      {t("registration.phoneNo")}
+                      {t("registration.phoneNumber")}
                     </FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />

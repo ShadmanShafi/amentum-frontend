@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { getLocalStorage, setLocalStorage } from "@/utils/localStorage";
+import { getLocalStorage, setLocalStorage } from "@/utils/storageUtils";
 
 export const LANGUAGE = {
   GERMAN: "de",
