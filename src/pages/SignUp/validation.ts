@@ -18,7 +18,7 @@ export const createFormSchema = (t: (key: string) => string) => {
       email: z.string().email({
         message: t("registration.emailValidation"),
       }),
-      phoneNo: z
+      phoneNumber: z
         .string()
         .min(10, { message: t("registration.phoneNoValidation") })
         .regex(/^\+?[1-9]\d{1,14}$/, {

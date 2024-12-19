@@ -23,6 +23,7 @@ import AuthPageContainer from "@/components/shared/AuthPageContainer";
 
 import { AmentumLogo } from "@/assets/AmentumLogo";
 import { createFormSchema } from "./validation";
+import { setLocalStorage } from "@/utils/storageUtils";
 
 const Login = () => {
   const { t } = useTranslation();
@@ -43,6 +44,9 @@ const Login = () => {
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log("submitted data: ", data);
+
+    // remove this line when the backend is ready
+    setLocalStorage("accessToken", "token");
 
     navigate("/server-management/servers/vps");
   };

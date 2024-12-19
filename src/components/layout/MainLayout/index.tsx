@@ -5,11 +5,11 @@ import { AppSidebar } from "@/components/layout/MainLayout/AppSideBar";
 import { Container } from "@/components/layout/MainLayout/Container";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Header } from "@/components/layout/MainLayout/Header";
-// import { getLocalStorage } from "@/utils/localStorage";
+import { getLocalStorage } from "@/utils/storageUtils";
 
 export const MainLayout: FC = (): JSX.Element => {
-  // const token = getLocalStorage("access_token");
-  const token = "token";
+  const token = getLocalStorage("accessToken");
+  // const token = "token";
 
   if (token) {
     return (
