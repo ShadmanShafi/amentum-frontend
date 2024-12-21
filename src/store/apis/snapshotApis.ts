@@ -5,16 +5,29 @@ import {
   SnapshotUpdateResponseType,
   SnapshotDeleteRequestType,
   SnapshotDeleteResponseType,
+  SnapshotCreateRequestType,
+  SnapshotCreateResponseType,
 } from "@/typings/snapshotApi";
 
 export const snapshotApi = baseApiWithAuthAndRefresh.injectEndpoints({
   endpoints: (builder) => ({
+    snapshotCreate: builder.mutation<
+      SnapshotCreateResponseType,
+      SnapshotCreateRequestType
+    >({
+      query: ({ nodeId, vmId, ...rest }) => ({
+        url: `/vps/nodes/${nodeId}/vms/${vmId}/snapshots`,
+        method: "POST",
+        body: rest,
+      }),
+    }),
+
     snapshotUpdate: builder.mutation<
       SnapshotUpdateResponseType,
       SnapshotUpdateRequestType
     >({
-      query: ({ nodeId, vmsId, snapshotId, ...rest }) => ({
-        url: `/vps/nodes/${nodeId}/vms/${vmsId}/snapshots/${snapshotId}`,
+      query: ({ nodeId, vmId, snapshotName, ...rest }) => ({
+        url: `/vps/nodes/${nodeId}/vms/${vmId}/snapshots/${snapshotName}`,
         method: "PUT",
         body: rest,
       }),
@@ -33,5 +46,8 @@ export const snapshotApi = baseApiWithAuthAndRefresh.injectEndpoints({
   }),
 });
 
-export const { useSnapshotUpdateMutation, useSnapshotDeleteMutation } =
-  snapshotApi;
+export const {
+  useSnapshotCreateMutation,
+  useSnapshotUpdateMutation,
+  useSnapshotDeleteMutation,
+} = snapshotApi;

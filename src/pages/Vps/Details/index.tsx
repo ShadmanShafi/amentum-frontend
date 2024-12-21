@@ -50,6 +50,8 @@ import {
 import {
   createNewInstallationFormSchema,
   createPasswordResetFormSchema,
+  createSnapshotFormSchema,
+  updateSnapshotFormSchema,
 } from "./validation";
 import {
   Select,
@@ -81,7 +83,11 @@ import {
 import { ArrowDownAz, ArrowDownZA } from "lucide-react";
 import { IconEdit } from "@/assets/Icons/IconEdit";
 import { IconDelete } from "@/assets/Icons/IconDelete";
-import { useSnapshotDeleteMutation } from "@/store/apis/snapshotApis";
+import {
+  useSnapshotCreateMutation,
+  useSnapshotDeleteMutation,
+  useSnapshotUpdateMutation,
+} from "@/store/apis/snapshotApis";
 
 const VpsDetails = () => {
   const [isHardResetDialogOpen, setIsHardResetDialogOpen] = useState(false);
@@ -89,6 +95,10 @@ const VpsDetails = () => {
   const [isNewInstallationDialogOpen, setIsNewInstallationDialogOpen] =
     useState(false);
   const [isPasswordResetDialogOpen, setIsPasswordResetDialogOpen] =
+    useState(false);
+  const [isSnapshotCreateDialogOpen, setIsSnapshotCreateDialogOpen] =
+    useState(false);
+  const [isSnapshotEditDialogOpen, setIsSnapshotEditDialogOpen] =
     useState(false);
 
   const { nodeId, vmId } = useParams();
@@ -115,11 +125,17 @@ const VpsDetails = () => {
   const [snapshotDelete, { isLoading: isSnapshotDeleteLoading }] =
     useSnapshotDeleteMutation();
   const [selectedSnapshotName, setSelectedSnapshotName] = useState<string>("");
+  const [snapshotCreate, { isLoading: isSnapshotCreateLoading }] =
+    useSnapshotCreateMutation();
+  const [snapshotUpdate, { isLoading: isSnapshotUpdateLoading }] =
+    useSnapshotUpdateMutation();
 
   const { data: vmsList } = useGetVmsListQuery();
 
   const newInstallationFormSchema = createNewInstallationFormSchema();
   const passwordResetFormSchema = createPasswordResetFormSchema();
+  const snapshotCreateFormSchema = createSnapshotFormSchema();
+  const snapshotEditFormSchema = updateSnapshotFormSchema();
 
   const newInstallationForm = useForm<
     z.infer<typeof newInstallationFormSchema>
@@ -138,6 +154,21 @@ const VpsDetails = () => {
     defaultValues: {
       user: "",
       newPassword: "",
+    },
+  });
+
+  const snapshotCreateForm = useForm<z.infer<typeof snapshotCreateFormSchema>>({
+    resolver: zodResolver(snapshotCreateFormSchema),
+    defaultValues: {
+      snapshot_name: "",
+      description: "",
+    },
+  });
+
+  const snapshotUpdateForm = useForm<z.infer<typeof snapshotEditFormSchema>>({
+    resolver: zodResolver(snapshotEditFormSchema),
+    defaultValues: {
+      description: "",
     },
   });
 
@@ -243,12 +274,63 @@ const VpsDetails = () => {
     }
   };
 
+  const handleSnapshotCreateSubmit = async (
+    data: z.infer<typeof snapshotCreateFormSchema>
+  ) => {
+    setIsSnapshotCreateDialogOpen(true);
+
+    try {
+      const response = await snapshotCreate({
+        nodeId: nodeId!,
+        vmId: vmId!,
+        snapshot_name: data.snapshot_name,
+        description: data.description,
+      }).unwrap();
+      toast.info(`${response?.message}`);
+    } catch (error: unknown) {
+      const errorMessage =
+        (error as { data?: { message?: string }; message?: string }).data
+          ?.message ||
+        (error as { message?: string }).message ||
+        "";
+      toast.error(`${errorMessage}`);
+    } finally {
+      setIsSnapshotCreateDialogOpen(false);
+      snapshotCreateForm.reset();
+      refetch();
+    }
+  };
+
   const SnapshotsTable = () => {
-    const handleEdit = (row: Snapshot) => {
-      console.log("Edit: ", row);
+    const handleSnapshotEditSubmit = async (
+      data: z.infer<typeof snapshotEditFormSchema>,
+      snapshot_name: string
+    ) => {
+      setIsSnapshotEditDialogOpen(true);
+
+      try {
+        const response = await snapshotUpdate({
+          nodeId: nodeId!,
+          vmId: vmId!,
+          snapshotName: snapshot_name,
+          description: data.description,
+        }).unwrap();
+        toast.info(`${response?.message}`);
+      } catch (error: unknown) {
+        const errorMessage =
+          (error as { data?: { message?: string }; message?: string }).data
+            ?.message ||
+          (error as { message?: string }).message ||
+          "";
+        toast.error(`${errorMessage}`);
+      } finally {
+        setIsSnapshotEditDialogOpen(false);
+        snapshotUpdateForm.reset();
+        refetch();
+      }
     };
 
-    const handleDelete = async (row: Snapshot) => {
+    const handleSnapshotDelete = async (row: Snapshot) => {
       setSelectedSnapshotName(row.name);
 
       try {
@@ -267,6 +349,7 @@ const VpsDetails = () => {
         toast.error(`Snapshot deletion failed: ${errorMessage}`);
       } finally {
         refetch();
+        setSelectedSnapshotName("");
       }
     };
 
@@ -292,19 +375,83 @@ const VpsDetails = () => {
         header: "Quick Action",
         cell: ({ row }: { row: { original: Snapshot } }) => (
           <div className="flex space-x-2">
-            <Button
-              className="px-2 py-1"
-              variant="ghost"
-              size="sm"
-              onClick={() => handleEdit(row.original)}
+            <Dialog
+              open={isSnapshotEditDialogOpen}
+              onOpenChange={setIsSnapshotEditDialogOpen}
             >
-              <IconEdit />
-            </Button>
+              <DialogTrigger asChild>
+                <div className="flex items-center justify-center transition-transform cursor-pointer hover:scale-105 active:scale-95">
+                  <IconEdit scale={0.7} />
+                </div>
+              </DialogTrigger>
+
+              {!isSnapshotUpdateLoading ? (
+                <DialogContent className="sm:max-w-[425px] gap-1">
+                  <DialogHeader className="flex justify-center">
+                    <h2 className="mt-4 mb-2 text-center text-customTextColor">
+                      Enter the information below to Edit the Snapshot
+                    </h2>
+                  </DialogHeader>
+                  <Form {...snapshotUpdateForm}>
+                    <form
+                      onSubmit={snapshotUpdateForm.handleSubmit((data) =>
+                        handleSnapshotEditSubmit(data, row.original.name)
+                      )}
+                      className="flex flex-col gap-2 p-1"
+                    >
+                      <FormField
+                        control={snapshotUpdateForm.control}
+                        name="description"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input placeholder="Description" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <DialogFooter>
+                        <Button type="submit" className="px-10 mt-2">
+                          Confirm
+                        </Button>
+                      </DialogFooter>
+                    </form>
+                  </Form>
+                </DialogContent>
+              ) : (
+                <DialogContent
+                  className="flex items-center justify-center"
+                  unClosable
+                >
+                  <>
+                    <h2 className="text-xl font-semibold text-customTextColor">
+                      Editing the Snapshot's description
+                    </h2>
+                    <div className="flex items-center justify-center space-x-2">
+                      <div
+                        className="w-4 h-4 duration-1000 rounded-full animate-pulse bg-customPrimaryBtnHoverBg"
+                        style={{ animationDelay: "0s" }}
+                      ></div>
+                      <div
+                        className="w-4 h-4 duration-1000 rounded-full animate-pulse bg-customPrimaryBtnHoverBg"
+                        style={{ animationDelay: "0.2s" }}
+                      ></div>
+                      <div
+                        className="w-4 h-4 duration-1000 rounded-full animate-pulse bg-customPrimaryBtnHoverBg"
+                        style={{ animationDelay: "0.4s" }}
+                      ></div>
+                    </div>
+                  </>
+                </DialogContent>
+              )}
+            </Dialog>
+
             <Button
               className="px-2 py-1 active:bg-destructive-500"
               variant="ghost"
               size="sm"
-              onClick={() => handleDelete(row.original)}
+              onClick={() => handleSnapshotDelete(row.original)}
               loading={
                 selectedSnapshotName === row.original.name &&
                 isSnapshotDeleteLoading
@@ -365,18 +512,40 @@ const VpsDetails = () => {
           </TableHeader>
 
           <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                className="text-sm cursor-pointer hover:bg-customTableRowHoverBg text-customTextColor"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="px-2 py-1 border sm:px-4">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
+            {isFetching
+              ? Array.from({ length: 2 }).map((_, index) => (
+                  <TableRow
+                    key={index}
+                    className="text-sm cursor-pointer hover:bg-customTableRowHoverBg text-customTextColor"
+                  >
+                    {snapshotColumns.map((column) => (
+                      <TableCell
+                        key={column.accessorKey || column.id}
+                        className="px-4 py-2 border sm:px-4"
+                      >
+                        <Skeleton className="w-full h-4 bg-slate-300" />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              : table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    className="text-sm cursor-pointer hover:bg-customTableRowHoverBg text-customTextColor"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className="px-2 py-1 border sm:px-4"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
           </TableBody>
         </Table>
 
@@ -437,12 +606,18 @@ const VpsDetails = () => {
             onOpenChange={setIsHardResetDialogOpen}
           >
             <DialogTrigger asChild>
-              <div
-                className="transition-transform cursor-pointer hover:scale-105 active:scale-95"
-                onClick={handleHardReset}
-              >
-                <IconHardReset scale={isMobile ? 0.8 : 1} />
-              </div>
+              {isFetching ? (
+                <div className="cursor-not-allowed">
+                  <Skeleton className="w-1/6 h-20 bg-slate-300" />
+                </div>
+              ) : (
+                <div
+                  className="transition-transform cursor-pointer hover:scale-105 active:scale-95"
+                  onClick={handleHardReset}
+                >
+                  <IconHardReset scale={isMobile ? 0.8 : 1} />
+                </div>
+              )}
             </DialogTrigger>
             <DialogContent
               className="flex items-center justify-center"
@@ -478,9 +653,15 @@ const VpsDetails = () => {
             onOpenChange={setIsNewInstallationDialogOpen}
           >
             <DialogTrigger asChild>
-              <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
-                <IconNewInstallation scale={isMobile ? 0.8 : 1} />
-              </div>
+              {isFetching ? (
+                <div className="cursor-not-allowed">
+                  <Skeleton className="w-1/6 h-20 bg-slate-300" />
+                </div>
+              ) : (
+                <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
+                  <IconNewInstallation scale={isMobile ? 0.8 : 1} />
+                </div>
+              )}
             </DialogTrigger>
 
             {!isNewInstallationLoading ? (
@@ -617,9 +798,15 @@ const VpsDetails = () => {
             onOpenChange={setIsPasswordResetDialogOpen}
           >
             <DialogTrigger asChild>
-              <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
-                <IconPasswordReset scale={isMobile ? 0.8 : 1} />
-              </div>
+              {isFetching ? (
+                <div className="cursor-not-allowed">
+                  <Skeleton className="w-1/6 h-20 bg-slate-300" />
+                </div>
+              ) : (
+                <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
+                  <IconPasswordReset scale={isMobile ? 0.8 : 1} />
+                </div>
+              )}
             </DialogTrigger>
 
             {!isPasswordResetLoading ? (
@@ -702,12 +889,18 @@ const VpsDetails = () => {
             onOpenChange={setIsSoftResetDialogOpen}
           >
             <DialogTrigger asChild>
-              <div
-                className="transition-transform cursor-pointer hover:scale-105 active:scale-95"
-                onClick={handleSoftReset}
-              >
-                <IconSoftReset scale={isMobile ? 0.8 : 1} />
-              </div>
+              {isFetching ? (
+                <div className="cursor-not-allowed">
+                  <Skeleton className="w-1/6 h-20 bg-slate-300" />
+                </div>
+              ) : (
+                <div
+                  className="transition-transform cursor-pointer hover:scale-105 active:scale-95"
+                  onClick={handleSoftReset}
+                >
+                  <IconSoftReset scale={isMobile ? 0.8 : 1} />
+                </div>
+              )}
             </DialogTrigger>
             <DialogContent
               className="flex items-center justify-center"
@@ -738,9 +931,95 @@ const VpsDetails = () => {
           </Dialog>
 
           {/* Snapshot Create */}
-          <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
-            <IconSnapshotCreate scale={isMobile ? 0.8 : 1} />
-          </div>
+          <Dialog
+            open={isSnapshotCreateDialogOpen}
+            onOpenChange={setIsSnapshotCreateDialogOpen}
+          >
+            <DialogTrigger asChild>
+              {isFetching ? (
+                <div className="cursor-not-allowed">
+                  <Skeleton className="w-1/6 h-20 bg-slate-300" />
+                </div>
+              ) : (
+                <div className="transition-transform cursor-pointer hover:scale-105 active:scale-95">
+                  <IconSnapshotCreate scale={isMobile ? 0.8 : 1} />
+                </div>
+              )}
+            </DialogTrigger>
+
+            {!isSnapshotCreateLoading ? (
+              <DialogContent className="sm:max-w-[425px] gap-1">
+                <DialogHeader className="flex justify-center">
+                  <h2 className="mt-4 mb-2 text-center text-customTextColor">
+                    Enter the information below to Create a Snapshot
+                  </h2>
+                </DialogHeader>
+                <Form {...snapshotCreateForm}>
+                  <form
+                    onSubmit={snapshotCreateForm.handleSubmit(
+                      handleSnapshotCreateSubmit
+                    )}
+                    className="flex flex-col gap-2 p-1"
+                  >
+                    <FormField
+                      control={snapshotCreateForm.control}
+                      name="snapshot_name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input placeholder="Snapshot name" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={snapshotCreateForm.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input placeholder="Description" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <DialogFooter>
+                      <Button type="submit" className="px-10 mt-2">
+                        Confirm
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </Form>
+              </DialogContent>
+            ) : (
+              <DialogContent
+                className="flex items-center justify-center"
+                unClosable
+              >
+                <>
+                  <h2 className="text-xl font-semibold text-customTextColor">
+                    Creating a new Snapshot
+                  </h2>
+                  <div className="flex items-center justify-center space-x-2">
+                    <div
+                      className="w-4 h-4 duration-1000 rounded-full animate-pulse bg-customPrimaryBtnHoverBg"
+                      style={{ animationDelay: "0s" }}
+                    ></div>
+                    <div
+                      className="w-4 h-4 duration-1000 rounded-full animate-pulse bg-customPrimaryBtnHoverBg"
+                      style={{ animationDelay: "0.2s" }}
+                    ></div>
+                    <div
+                      className="w-4 h-4 duration-1000 rounded-full animate-pulse bg-customPrimaryBtnHoverBg"
+                      style={{ animationDelay: "0.4s" }}
+                    ></div>
+                  </div>
+                </>
+              </DialogContent>
+            )}
+          </Dialog>
         </div>
       </div>
 

@@ -17,7 +17,7 @@ export const serverActionApi = baseApiWithAuthAndRefresh.injectEndpoints({
   endpoints: (builder) => ({
     hardReset: builder.mutation<HardResetResponseType, HardResetRequestType>({
       query: ({ nodeId, vmId }) => ({
-        url: `/vps/nodes/$${nodeId}/vms/${vmId}/hard_reset`,
+        url: `/vps/nodes/${nodeId}/vms/${vmId}/hard_reset`,
         method: "POST",
       }),
     }),

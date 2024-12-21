@@ -30,3 +30,25 @@ export const createPasswordResetFormSchema = () => {
     }),
   });
 };
+
+export const createSnapshotFormSchema = () => {
+  return z.object({
+    snapshot_name: z
+      .string()
+      .min(1, {
+        message: "Snapshot name is required",
+      })
+      .regex(/^\S*$/, { message: "Snapshot name cannot contain spaces" }),
+    description: z.string().min(1, {
+      message: "Description is required",
+    }),
+  });
+};
+
+export const updateSnapshotFormSchema = () => {
+  return z.object({
+    description: z.string().min(1, {
+      message: "Description is required",
+    }),
+  });
+};
